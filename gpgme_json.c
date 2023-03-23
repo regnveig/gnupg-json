@@ -2,7 +2,7 @@
 
 /* CONST TO STRINGS */
 
-const char * gpgme_validity_string(gpgme_validity_t val) {
+const char *gpgme_validity_string(gpgme_validity_t val) {
 	switch (val) {
 	case GPGME_VALIDITY_UNKNOWN:
 		return "unknown\0";
@@ -20,7 +20,7 @@ const char * gpgme_validity_string(gpgme_validity_t val) {
 	return "-\0";
 }
 
-const char * gpgme_pinentry_mode_string(gpgme_pinentry_mode_t val) {
+const char *gpgme_pinentry_mode_string(gpgme_pinentry_mode_t val) {
 	switch (val) {
 	case GPGME_PINENTRY_MODE_DEFAULT:
 		return "default\0";
@@ -36,7 +36,7 @@ const char * gpgme_pinentry_mode_string(gpgme_pinentry_mode_t val) {
 	return "-\0";
 }
 
-const char * gpgme_data_encoding_string(gpgme_data_encoding_t val) {
+const char *gpgme_data_encoding_string(gpgme_data_encoding_t val) {
 	switch (val) {
 	case GPGME_DATA_ENCODING_NONE:
 		return "none\0";
@@ -58,7 +58,7 @@ const char * gpgme_data_encoding_string(gpgme_data_encoding_t val) {
 	return "-\0";
 }
 
-const char * gpgme_data_type_string(gpgme_data_type_t val) {
+const char *gpgme_data_type_string(gpgme_data_type_t val) {
 	switch (val) {
 	case GPGME_DATA_TYPE_INVALID:
 		return "invalid\0";
@@ -88,7 +88,7 @@ const char * gpgme_data_type_string(gpgme_data_type_t val) {
 	return "-\0";
 }
 
-const char * pka_trust_string(unsigned int val) {
+const char *pka_trust_string(unsigned int val) {
 	switch (val) {
 	case 0:
 		return "no_pka_info\0";
@@ -427,15 +427,18 @@ gpgme_error_t jsonify_gpgme_key_sig(gpgme_key_sig_t sig, gpgme_data_t dh) {
 	while (note) {
 		err = jsonify_gpgme_sig_notation(note, dh);
 		if (err) {
-			return err;
+			break;
 		}
 		if (note->next) {
 			err = jsonify_comma(dh);
 			if (err) {
-				return err;
+				break;
 			}
 		}
 		note = note->next;
+	}
+	if (err) {
+		return err;
 	}
 	err = jsonify_right_square_bracket(dh);
 	if (err) {
@@ -527,15 +530,18 @@ gpgme_error_t jsonify_gpgme_user_id(gpgme_user_id_t uid, gpgme_data_t dh) {
 	while (info) {
 		err = jsonify_gpgme_tofu_info(info, dh);
 		if (err) {
-			return err;
+			break;
 		}
 		if (info->next) {
 			err = jsonify_comma(dh);
 			if (err) {
-				return err;
+				break;
 			}
 		}
 		info = info->next;
+	}
+	if (err) {
+		return err;
 	}
 	err = jsonify_right_square_bracket(dh);
 	if (err) {
@@ -562,15 +568,18 @@ gpgme_error_t jsonify_gpgme_user_id(gpgme_user_id_t uid, gpgme_data_t dh) {
 	while (sig) {
 		err = jsonify_gpgme_key_sig(sig, dh);
 		if (err) {
-			return err;
+			break;
 		}
 		if (sig->next) {
 			err = jsonify_comma(dh);
 			if (err) {
-				return err;
+				break;
 			}
 		}
 		sig = sig->next;
+	}
+	if (err) {
+		return err;
 	}
 	err = jsonify_right_square_bracket(dh);
 	if (err) {
@@ -702,15 +711,18 @@ gpgme_error_t jsonify_gpgme_key(gpgme_key_t key, gpgme_data_t dh) {
 	while (subkey) {
 		err = jsonify_gpgme_subkey(subkey, dh);
 		if (err) {
-			return err;
+			break;
 		}
 		if (subkey->next) {
 			err = jsonify_comma(dh);
 			if (err) {
-				return err;
+				break;
 			}
 		}
 		subkey = subkey->next;
+	}
+	if (err) {
+		return err;
 	}
 	err = jsonify_right_square_bracket(dh);
 	if (err) {
@@ -737,15 +749,18 @@ gpgme_error_t jsonify_gpgme_key(gpgme_key_t key, gpgme_data_t dh) {
 	while (uid) {
 		err = jsonify_gpgme_user_id(uid, dh);
 		if (err) {
-			return err;
+			break;
 		}
 		if (uid->next) {
 			err = jsonify_comma(dh);
 			if (err) {
-				return err;
+				break;
 			}
 		}
 		uid = uid->next;
+	}
+	if (err) {
+		return err;
 	}
 	err = jsonify_right_square_bracket(dh);
 	if (err) {
@@ -900,15 +915,18 @@ gpgme_error_t jsonify_ctx(gpgme_ctx_t ctx, gpgme_data_t dh) {
 	while (engine) {
 		err = jsonify_gpgme_engine_info(engine, dh);
 		if (err) {
-			return err;
+			break;
 		}
 		if (engine->next) {
 			err = jsonify_comma(dh);
 			if (err) {
-				return err;
+				break;
 			}
 		}
 		engine = engine->next;
+	}
+	if (err) {
+		return err;
 	}
 	err = jsonify_right_square_bracket(dh);
 	if (err) {
@@ -953,7 +971,7 @@ gpgme_error_t jsonify_ctx(gpgme_ctx_t ctx, gpgme_data_t dh) {
 	if (err) {
 		return err;
 	}
-	const char * ctx_flags[19] = {
+	const char *ctx_flags[19] = {
 		"redraw\0",
 		"full-status\0",
 		"raw-description\0",
@@ -984,9 +1002,12 @@ gpgme_error_t jsonify_ctx(gpgme_ctx_t ctx, gpgme_data_t dh) {
 			err = jsonify_key_null(ctx_flags[i], dh, comma);
 		}
 		if (err) {
-			return err;
+			break;
 		}
 		i++;
+	}
+	if (err) {
+		return err;
 	}
 	err = jsonify_right_brace(dh);
 	if (err) {
@@ -1076,15 +1097,18 @@ gpgme_error_t jsonify_gpgme_signature(gpgme_signature_t sig, gpgme_data_t dh) {
 	while (note) {
 		err = jsonify_gpgme_sig_notation(note, dh);
 		if (err) {
-			return err;
+			break;
 		}
 		if (note->next) {
 			err = jsonify_comma(dh);
 			if (err) {
-				return err;
+				break;
 			}
 		}
 		note = note->next;
+	}
+	if (err) {
+		return err;
 	}
 	err = jsonify_right_square_bracket(dh);
 	if (err) {
@@ -1218,15 +1242,18 @@ gpgme_error_t jsonify_gpgme_verify_result(gpgme_verify_result_t result, gpgme_da
 	while (sig) {
 		err = jsonify_gpgme_signature(sig, dh);
 		if (err) {
-			return err;
+			break;
 		}
 		if (sig->next) {
 			err = jsonify_comma(dh);
 			if (err) {
-				return err;
+				break;
 			}
 		}
 		sig = sig->next;
+	}
+	if (err) {
+		return err;
 	}
 	err = jsonify_right_square_bracket(dh);
 	if (err) {
