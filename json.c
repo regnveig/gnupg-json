@@ -112,20 +112,20 @@ gpgme_error_t jsonify_null(gpgme_data_t dh) {
 gpgme_error_t jsonify_key_bool(const char *key, int num, gpgme_data_t dh, int comma) {
 	gpgme_error_t err;
 	err = jsonify_string(key, dh);
-	if (err) {
+	if (err != GPG_ERR_NO_ERROR) {
 		return err;
 	}
 	err = jsonify_colon(dh);
-	if (err) {
+	if (err != GPG_ERR_NO_ERROR) {
 		return err;
 	}
 	err = jsonify_bool(num, dh);
-	if (err) {
+	if (err != GPG_ERR_NO_ERROR) {
 		return err;
 	}
 	if (comma) {
 		err = jsonify_comma(dh);
-		if (err) {
+		if (err != GPG_ERR_NO_ERROR) {
 			return err;
 		}
 	}
@@ -136,20 +136,20 @@ gpgme_error_t jsonify_key_string(const char *key,
 	const char *str, gpgme_data_t dh, int comma) {
 	gpgme_error_t err;
 	err = jsonify_string(key, dh);
-	if (err) {
+	if (err != GPG_ERR_NO_ERROR) {
 		return err;
 	}
 	err = jsonify_colon(dh);
-	if (err) {
+	if (err != GPG_ERR_NO_ERROR) {
 		return err;
 	}
 	err = jsonify_string(str, dh);
-	if (err) {
+	if (err != GPG_ERR_NO_ERROR) {
 		return err;
 	}
 	if (comma) {
 		err = jsonify_comma(dh);
-		if (err) {
+		if (err != GPG_ERR_NO_ERROR) {
 			return err;
 		}
 	}
@@ -159,20 +159,20 @@ gpgme_error_t jsonify_key_string(const char *key,
 gpgme_error_t jsonify_key_int(const char *key, int num, gpgme_data_t dh, int comma) {
 	gpgme_error_t err;
 	err = jsonify_string(key, dh);
-	if (err) {
+	if (err != GPG_ERR_NO_ERROR) {
 		return err;
 	}
 	err = jsonify_colon(dh);
-	if (err) {
+	if (err != GPG_ERR_NO_ERROR) {
 		return err;
 	}
 	err = jsonify_int(num, dh);
-	if (err) {
+	if (err != GPG_ERR_NO_ERROR) {
 		return err;
 	}
 	if (comma) {
 		err = jsonify_comma(dh);
-		if (err) {
+		if (err != GPG_ERR_NO_ERROR) {
 			return err;
 		}
 	}
@@ -182,20 +182,20 @@ gpgme_error_t jsonify_key_int(const char *key, int num, gpgme_data_t dh, int com
 gpgme_error_t jsonify_key_null(const char *key, gpgme_data_t dh, int comma) {
 	gpgme_error_t err;
 	err = jsonify_string(key, dh);
-	if (err) {
+	if (err != GPG_ERR_NO_ERROR) {
 		return err;
 	}
 	err = jsonify_colon(dh);
-	if (err) {
+	if (err != GPG_ERR_NO_ERROR) {
 		return err;
 	}
 	err = jsonify_null(dh);
-	if (err) {
+	if (err != GPG_ERR_NO_ERROR) {
 		return err;
 	}
 	if (comma) {
 		err = jsonify_comma(dh);
-		if (err) {
+		if (err != GPG_ERR_NO_ERROR) {
 			return err;
 		}
 	}
