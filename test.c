@@ -19,7 +19,6 @@ void test_key() {
 	gpgme_ctx_t ctx;
 	gpgme_key_t key;
 	gpgme_data_t json;
-	char *plaintext;
 	gpgme_error_t err = set_context(&ctx);
 	if (err == GPG_ERR_NO_ERROR) {
 		err = gpgme_set_keylist_mode(ctx, GPGME_KEYLIST_MODE_SIGS | GPGME_KEYLIST_MODE_SIG_NOTATIONS | GPGME_KEYLIST_MODE_WITH_TOFU | GPGME_KEYLIST_MODE_WITH_KEYGRIP | GPGME_KEYLIST_MODE_VALIDATE | GPGME_KEYLIST_MODE_WITH_SECRET);
@@ -41,7 +40,7 @@ void test_key() {
 		}
 	}
 	if (err == GPG_ERR_NO_ERROR) {
-		plaintext = gpgme_data_release_and_get_mem(json, NULL);
+		char *plaintext = gpgme_data_release_and_get_mem(json, NULL);
 		fprintf(stdout, "%s\n", plaintext);
 		gpgme_free(plaintext);
 		gpgme_release(ctx);
@@ -55,7 +54,6 @@ void test_data() {
 	gpgme_ctx_t ctx;
 	gpgme_data_t data;
 	gpgme_data_t json;
-	char *plaintext;
 	gpgme_error_t err = set_context(&ctx);
 	if (err == GPG_ERR_NO_ERROR) {
 		err = gpgme_data_new(&json);
@@ -77,7 +75,7 @@ void test_data() {
 		}
 	}
 	if (err == GPG_ERR_NO_ERROR) {
-		plaintext = gpgme_data_release_and_get_mem(json, NULL);
+		char *plaintext = gpgme_data_release_and_get_mem(json, NULL);
 		fprintf(stdout, "%s\n", plaintext);
 		gpgme_free(plaintext);
 		gpgme_release(ctx);
@@ -91,7 +89,6 @@ void test_verify() {
 	gpgme_data_t data;
 	gpgme_data_t plain;
 	gpgme_data_t json;
-	char *plaintext;
 	gpgme_error_t err = set_context(&ctx);
 	if (err == GPG_ERR_NO_ERROR) {
 		err = gpgme_data_new(&json);
@@ -121,7 +118,7 @@ void test_verify() {
 		}
 	}
 	if (err == GPG_ERR_NO_ERROR) {
-		plaintext = gpgme_data_release_and_get_mem(json, NULL);
+		char *plaintext = gpgme_data_release_and_get_mem(json, NULL);
 		fprintf(stdout, "%s\n", plaintext);
 		gpgme_free(plaintext);
 		gpgme_release(ctx);
@@ -133,7 +130,7 @@ void test_verify() {
 void test_ctx() {
 	gpgme_ctx_t ctx;
 	gpgme_data_t json;
-	char *plaintext;
+	
 	gpgme_error_t err = set_context(&ctx);
 	if (err == GPG_ERR_NO_ERROR) {
 		err = gpgme_data_new(&json);
@@ -148,7 +145,7 @@ void test_ctx() {
 		}
 	}
 	if (err == GPG_ERR_NO_ERROR) {
-		plaintext = gpgme_data_release_and_get_mem(json, NULL);
+		char *plaintext = gpgme_data_release_and_get_mem(json, NULL);
 		fprintf(stdout, "%s\n", plaintext);
 		gpgme_free(plaintext);
 		gpgme_release(ctx);
