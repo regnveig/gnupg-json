@@ -3,104 +3,148 @@
 /* CONST TO STRINGS */
 
 const char *gpgme_validity_string(gpgme_validity_t val) {
-	const char *result = "-\0";
+	const char *result;
 	switch (val) {
 	case GPGME_VALIDITY_UNKNOWN:
 		result = "unknown\0";
+		break;
 	case GPGME_VALIDITY_UNDEFINED:
 		result = "undefined\0";
+		break;
 	case GPGME_VALIDITY_NEVER:
 		result = "never\0";
+		break;
 	case GPGME_VALIDITY_MARGINAL:
 		result = "marginal\0";
+		break;
 	case GPGME_VALIDITY_FULL:
 		result = "full\0";
+		break;
 	case GPGME_VALIDITY_ULTIMATE:
 		result = "ultimate\0";
+		break;
+	default:
+		result = "-\0";
 	}
 	return result;
 }
 
 const char *gpgme_pinentry_mode_string(gpgme_pinentry_mode_t val) {
-	const char *result = "-\0";
+	const char *result;
 	switch (val) {
 	case GPGME_PINENTRY_MODE_DEFAULT:
 		result = "default\0";
+		break;
 	case GPGME_PINENTRY_MODE_ASK:
 		result = "ask\0";
+		break;
 	case GPGME_PINENTRY_MODE_CANCEL:
 		result = "cancel\0";
+		break;
 	case GPGME_PINENTRY_MODE_ERROR:
 		result = "error\0";
+		break;
 	case GPGME_PINENTRY_MODE_LOOPBACK:
 		result = "loopback\0";
+		break;
+	default:
+		result = "-\0";
 	}
 	return result;
 }
 
 const char *gpgme_data_encoding_string(gpgme_data_encoding_t val) {
-	const char *result = "-\0";
+	const char *result;
 	switch (val) {
 	case GPGME_DATA_ENCODING_NONE:
 		result = "none\0";
+		break;
 	case GPGME_DATA_ENCODING_BINARY:
 		result = "binary\0";
+		break;
 	case GPGME_DATA_ENCODING_BASE64:
 		result = "base64\0";
+		break;
 	case GPGME_DATA_ENCODING_ARMOR:
 		result = "armor\0";
+		break;
 	case GPGME_DATA_ENCODING_MIME:
 		result = "mime\0";
+		break;
 	case GPGME_DATA_ENCODING_URL:
 		result = "url\0";
+		break;
 	case GPGME_DATA_ENCODING_URL0:
 		result = "url0\0";
+		break;
 	case GPGME_DATA_ENCODING_URLESC:
 		result = "urlesc\0";
+		break;
+	default:
+		result = "-\0";
 	}
 	return result;
 }
 
 const char *gpgme_data_type_string(gpgme_data_type_t val) {
-	const char *result = "-\0";
+	const char *result;
 	switch (val) {
 	case GPGME_DATA_TYPE_INVALID:
 		result = "invalid\0";
+		break;
 	case GPGME_DATA_TYPE_UNKNOWN:
 		result = "unknown\0";
+		break;
 	case GPGME_DATA_TYPE_PGP_SIGNED:
 		result = "pgp_signed\0";
+		break;
 	case GPGME_DATA_TYPE_PGP_ENCRYPTED:
 		result = "pgp_encrypted\0";
+		break;
 	case GPGME_DATA_TYPE_PGP_SIGNATURE:
 		result = "pgp_signature\0";
+		break;
 	case GPGME_DATA_TYPE_PGP_OTHER:
 		result = "pgp_other\0";
+		break;
 	case GPGME_DATA_TYPE_PGP_KEY:
 		result = "pgp_key\0";
+		break;
 	case GPGME_DATA_TYPE_CMS_SIGNED:
 		result = "cms_signed\0";
+		break;
 	case GPGME_DATA_TYPE_CMS_ENCRYPTED:
 		result = "cms_encrypted\0";
+		break;
 	case GPGME_DATA_TYPE_CMS_OTHER:
 		result = "cms_other\0";
+		break;
 	case GPGME_DATA_TYPE_X509_CERT:
 		result = "x509_cert\0";
+		break;
 	case GPGME_DATA_TYPE_PKCS12:
 		result = "pkcs12\0";
+		break;
+	default:
+		result = "-\0";
 	}
 	return result;
 }
 
 const char *pka_trust_string(unsigned int val) {
-	const char *result = "-\0";
+	const char *result;
 	switch (val) {
 	case 0:
 		result = "no_pka_info\0";
+		break;
 	case 1:
 		result = "pka_verification_failed\0";
+		break;
 	case 2:
 		result = "pke_verification_success\0";
+		break;
+	default:
+		result = "-\0";
 	}
 	return result;
 }
