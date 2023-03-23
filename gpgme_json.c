@@ -3,101 +3,106 @@
 /* CONST TO STRINGS */
 
 const char *gpgme_validity_string(gpgme_validity_t val) {
+	const char *result = "-\0";
 	switch (val) {
 	case GPGME_VALIDITY_UNKNOWN:
-		return "unknown\0";
+		result = "unknown\0";
 	case GPGME_VALIDITY_UNDEFINED:
-		return "undefined\0";
+		result = "undefined\0";
 	case GPGME_VALIDITY_NEVER:
-		return "never\0";
+		result = "never\0";
 	case GPGME_VALIDITY_MARGINAL:
-		return "marginal\0";
+		result = "marginal\0";
 	case GPGME_VALIDITY_FULL:
-		return "full\0";
+		result = "full\0";
 	case GPGME_VALIDITY_ULTIMATE:
-		return "ultimate\0";
+		result = "ultimate\0";
 	}
-	return "-\0";
+	return result;
 }
 
 const char *gpgme_pinentry_mode_string(gpgme_pinentry_mode_t val) {
+	const char *result = "-\0";
 	switch (val) {
 	case GPGME_PINENTRY_MODE_DEFAULT:
-		return "default\0";
+		result = "default\0";
 	case GPGME_PINENTRY_MODE_ASK:
-		return "ask\0";
+		result = "ask\0";
 	case GPGME_PINENTRY_MODE_CANCEL:
-		return "cancel\0";
+		result = "cancel\0";
 	case GPGME_PINENTRY_MODE_ERROR:
-		return "error\0";
+		result = "error\0";
 	case GPGME_PINENTRY_MODE_LOOPBACK:
-		return "loopback\0";
+		result = "loopback\0";
 	}
-	return "-\0";
+	return result;
 }
 
 const char *gpgme_data_encoding_string(gpgme_data_encoding_t val) {
+	const char *result = "-\0";
 	switch (val) {
 	case GPGME_DATA_ENCODING_NONE:
-		return "none\0";
+		result = "none\0";
 	case GPGME_DATA_ENCODING_BINARY:
-		return "binary\0";
+		result = "binary\0";
 	case GPGME_DATA_ENCODING_BASE64:
-		return "base64\0";
+		result = "base64\0";
 	case GPGME_DATA_ENCODING_ARMOR:
-		return "armor\0";
+		result = "armor\0";
 	case GPGME_DATA_ENCODING_MIME:
-		return "mime\0";
+		result = "mime\0";
 	case GPGME_DATA_ENCODING_URL:
-		return "url\0";
+		result = "url\0";
 	case GPGME_DATA_ENCODING_URL0:
-		return "url0\0";
+		result = "url0\0";
 	case GPGME_DATA_ENCODING_URLESC:
-		return "urlesc\0";
+		result = "urlesc\0";
 	}
-	return "-\0";
+	return result;
 }
 
 const char *gpgme_data_type_string(gpgme_data_type_t val) {
+	const char *result = "-\0";
 	switch (val) {
 	case GPGME_DATA_TYPE_INVALID:
-		return "invalid\0";
+		result = "invalid\0";
 	case GPGME_DATA_TYPE_UNKNOWN:
-		return "unknown\0";
+		result = "unknown\0";
 	case GPGME_DATA_TYPE_PGP_SIGNED:
-		return "pgp_signed\0";
+		result = "pgp_signed\0";
 	case GPGME_DATA_TYPE_PGP_ENCRYPTED:
-		return "pgp_encrypted\0";
+		result = "pgp_encrypted\0";
 	case GPGME_DATA_TYPE_PGP_SIGNATURE:
-		return "pgp_signature\0";
+		result = "pgp_signature\0";
 	case GPGME_DATA_TYPE_PGP_OTHER:
-		return "pgp_other\0";
+		result = "pgp_other\0";
 	case GPGME_DATA_TYPE_PGP_KEY:
-		return "pgp_key\0";
+		result = "pgp_key\0";
 	case GPGME_DATA_TYPE_CMS_SIGNED:
-		return "cms_signed\0";
+		result = "cms_signed\0";
 	case GPGME_DATA_TYPE_CMS_ENCRYPTED:
-		return "cms_encrypted\0";
+		result = "cms_encrypted\0";
 	case GPGME_DATA_TYPE_CMS_OTHER:
-		return "cms_other\0";
+		result = "cms_other\0";
 	case GPGME_DATA_TYPE_X509_CERT:
-		return "x509_cert\0";
+		result = "x509_cert\0";
 	case GPGME_DATA_TYPE_PKCS12:
-		return "pkcs12\0";
+		result = "pkcs12\0";
 	}
-	return "-\0";
+	return result;
 }
 
 const char *pka_trust_string(unsigned int val) {
+	const char *result = "-\0";
 	switch (val) {
 	case 0:
-		return "no_pka_info\0";
+		result = "no_pka_info\0";
 	case 1:
-		return "pka_verification_failed\0";
+		result = "pka_verification_failed\0";
 	case 2:
-		return "pke_verification_success\0";
+		result = "pke_verification_success\0";
 	}
-	return "-\0";
+	return result;
 }
 
 /* JSONIFY STRUCTS */
