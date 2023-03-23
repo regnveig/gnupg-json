@@ -25,6 +25,7 @@ const char *gpgme_validity_string(gpgme_validity_t val) {
 		break;
 	default:
 		result = "-\0";
+		break;
 	}
 	return result;
 }
@@ -49,6 +50,7 @@ const char *gpgme_pinentry_mode_string(gpgme_pinentry_mode_t val) {
 		break;
 	default:
 		result = "-\0";
+		break;
 	}
 	return result;
 }
@@ -82,6 +84,7 @@ const char *gpgme_data_encoding_string(gpgme_data_encoding_t val) {
 		break;
 	default:
 		result = "-\0";
+		break;
 	}
 	return result;
 }
@@ -127,6 +130,7 @@ const char *gpgme_data_type_string(gpgme_data_type_t val) {
 		break;
 	default:
 		result = "-\0";
+		break;
 	}
 	return result;
 }
@@ -145,6 +149,7 @@ const char *pka_trust_string(unsigned int val) {
 		break;
 	default:
 		result = "-\0";
+		break;
 	}
 	return result;
 }
@@ -152,156 +157,117 @@ const char *pka_trust_string(unsigned int val) {
 /* JSONIFY STRUCTS */
 
 gpgme_error_t jsonify_gpgme_error(gpgme_error_t error, gpgme_data_t dh) {
-	gpgme_error_t err;
-	err = jsonify_left_brace(dh);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
-	}
+	gpgme_error_t err = jsonify_left_brace(dh);
 	// code
-	err = jsonify_key_int("code\0", error, dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_int("code\0", error, dh, 1);
 	}
 	// desc
-	err = jsonify_key_string("description\0", gpgme_strerror(error), dh, 0);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_string("description\0", gpgme_strerror(error), dh, 0);
 	}
-	err = jsonify_right_brace(dh);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_right_brace(dh);
 	}
-	return GPG_ERR_NO_ERROR;
+	return err;
 }
 
 gpgme_error_t jsonify_gpgme_subkey(gpgme_subkey_t key, gpgme_data_t dh) {
-	gpgme_error_t err;
-	err = jsonify_left_brace(dh);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
-	}
+	gpgme_error_t err = jsonify_left_brace(dh);
 	// revoked ?
-	err = jsonify_key_bool("revoked\0", key->revoked, dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_bool("revoked\0", key->revoked, dh, 1);
 	}
 	// expired ?
-	err = jsonify_key_bool("expired\0", key->expired, dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_bool("expired\0", key->expired, dh, 1);
 	}
 	// disabled ?
-	err = jsonify_key_bool("disabled\0", key->disabled, dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_bool("disabled\0", key->disabled, dh, 1);
 	}
 	// invalid ?
-	err = jsonify_key_bool("invalid\0", key->invalid, dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_bool("invalid\0", key->invalid, dh, 1);
 	}
 	// can encrypt ?
-	err = jsonify_key_bool("can_encrypt\0", key->can_encrypt, dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_bool("can_encrypt\0", key->can_encrypt, dh, 1);
 	}
 	// can sign ?
-	err = jsonify_key_bool("can_sign\0", key->can_sign, dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_bool("can_sign\0", key->can_sign, dh, 1);
 	}
 	// can certify ?
-	err = jsonify_key_bool("can_certify\0", key->can_certify, dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_bool("can_certify\0", key->can_certify, dh, 1);
 	}
 	// can authenticate ?
-	err = jsonify_key_bool("can_authenticate\0", key->can_authenticate, dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_bool("can_authenticate\0", key->can_authenticate, dh, 1);
 	}
 	// is qualified ?
-	err = jsonify_key_bool("is_qualified\0", key->is_qualified, dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_bool("is_qualified\0", key->is_qualified, dh, 1);
 	}
 	// is DE VS?
-	err = jsonify_key_bool("is_de_vs\0", key->is_de_vs, dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_bool("is_de_vs\0", key->is_de_vs, dh, 1);
 	}
 	// is secret ?
-	err = jsonify_key_bool("secret\0", key->secret, dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_bool("secret\0", key->secret, dh, 1);
 	}
 	// algo
-	err = jsonify_key_string("pubkey_algo\0", gpgme_pubkey_algo_name(key->pubkey_algo), dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_string("pubkey_algo\0", gpgme_pubkey_algo_name(key->pubkey_algo), dh, 1);
 	}
 	// length
-	err = jsonify_key_int("length\0", key->length, dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_int("length\0", key->length, dh, 1);
 	}
 	// keyid
-	err = jsonify_key_string("keyid\0", key->keyid, dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_string("keyid\0", key->keyid, dh, 1);
 	}
 	// fpr
-	err = jsonify_key_string("fingerprint\0", key->fpr, dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_string("fingerprint\0", key->fpr, dh, 1);
 	}
 	// keygrip
-	if (key->keygrip != NULL) {
+	if ((key->keygrip != NULL) && (err == GPG_ERR_NO_ERROR)) {
 		err = jsonify_key_string("keygrip\0", key->keygrip, dh, 1);
 	} else {
 		err = jsonify_key_null("keygrip\0", dh, 1);
 	}
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
-	}
 	// timestamp
-	err = jsonify_key_int("timestamp\0", key->timestamp, dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_int("timestamp\0", key->timestamp, dh, 1);
 	}
 	// expires
-	err = jsonify_key_int("expires\0", key->expires, dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_int("expires\0", key->expires, dh, 1);
 	}
 	// is cardkey ?
-	err = jsonify_key_bool("is_cardkey\0", key->is_cardkey, dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_bool("is_cardkey\0", key->is_cardkey, dh, 1);
 	}
 	// card number
-	if (key->card_number != NULL) {
+	if ((key->card_number != NULL) && (err == GPG_ERR_NO_ERROR)) {
 		err = jsonify_key_string("card_number\0", key->card_number, dh, 1);
 	} else {
 		err = jsonify_key_null("card_number\0", dh, 1);
 	}
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
-	}
 	// curve
-	if (key->curve != NULL) {
+	if ((key->curve != NULL) && (err == GPG_ERR_NO_ERROR)) {
 		err = jsonify_key_string("curve\0", key->curve, dh, 0);
 	} else {
 		err = jsonify_key_null("curve\0", dh, 0);
 	}
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_right_brace(dh);
 	}
-	err = jsonify_right_brace(dh);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
-	}
-	return GPG_ERR_NO_ERROR;
+	return err;
 }
 
 gpgme_error_t jsonify_gpgme_sig_notation(gpgme_sig_notation_t note, gpgme_data_t dh) {
