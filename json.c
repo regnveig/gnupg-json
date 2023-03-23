@@ -126,7 +126,8 @@ gpgme_error_t jsonify_int(int num, gpgme_data_t dh) {
 		len = 2;
 	}
 	char str[len];
-	snprintf(str, len * sizeof(char), "%d%c", num, '\0');
+	int offset = snprintf(str, len * sizeof(char), "%d%c", num, '\0');
+	if (offset != len) { err = GPG_ERR_GENERAL; }
 	ssize_t length = gpgme_data_write(dh, str, len - 1);
 	if (length != (len - 1)) {
 		err = GPG_ERR_ENOMEM;
@@ -196,5 +197,5 @@ gpgme_error_t jsonify_key_null(const char *key, gpgme_data_t dh, int comma) {
 	if (comma && (err == GPG_ERR_NO_ERROR)) {
 		err = jsonify_comma(dh);
 	}
-	return GPG_ERR_NO_ERROR;
+	return err;
 }

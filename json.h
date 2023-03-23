@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
+#include <stdbool.h>
 
 #ifndef JSON_H
 #define JSON_H
