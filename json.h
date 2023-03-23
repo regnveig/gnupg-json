@@ -46,7 +46,8 @@ gpgme_error_t jsonify_null(gpgme_data_t dh);
 
 // JSON key-value
 gpgme_error_t jsonify_key_bool(const char *key, int num, gpgme_data_t dh, int comma);
-gpgme_error_t jsonify_key_string(const char *key, const char *str, gpgme_data_t dh, int comma);
+gpgme_error_t jsonify_key_string(const char *key,
+    const char *str, gpgme_data_t dh, int comma);
 gpgme_error_t jsonify_key_int(const char *key, int num, gpgme_data_t dh, int comma);
 gpgme_error_t jsonify_key_null(const char *key, gpgme_data_t dh, int comma);
 
