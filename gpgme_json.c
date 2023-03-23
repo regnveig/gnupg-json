@@ -154,6 +154,25 @@ const char *pka_trust_string(unsigned int val) {
 	return result;
 }
 
+const char *gpgme_sig_mode_string(gpgme_sig_mode_t val) {
+	const char *result;
+	switch (val) {
+	case GPGME_SIG_MODE_NORMAL:
+		result = "normal\0";
+		break;
+	case GPGME_SIG_MODE_DETACH:
+		result = "detach\0";
+		break;
+	case GPGME_SIG_MODE_CLEAR:
+		result = "clear\0";
+		break;
+	default:
+		result = "-\0";
+		break;
+	}
+	return result;
+}
+
 /* JSONIFY STRUCTS */
 
 gpgme_error_t jsonify_gpgme_error(gpgme_error_t error, gpgme_data_t dh) {
@@ -1076,6 +1095,128 @@ gpgme_error_t jsonify_gpgme_verify_result(gpgme_verify_result_t result, gpgme_da
 		gpgme_signature_t sig = result->signatures;
 		while (sig) {
 			err = jsonify_gpgme_signature(sig, dh);
+			if (err != GPG_ERR_NO_ERROR) {
+				break;
+			}
+			if (sig->next) {
+				err = jsonify_comma(dh);
+				if (err != GPG_ERR_NO_ERROR) {
+					break;
+				}
+			}
+			sig = sig->next;
+		}
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_right_square_bracket(dh);
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_right_brace(dh);
+	}
+	return err;
+}
+
+gpgme_error_t jsonify_gpgme_invalid_key(gpgme_invalid_key_t key, gpgme_data_t dh) {
+	gpgme_error_t err = jsonify_left_brace(dh);
+	// fpr
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_string("fpr\0", key->fpr, dh, true);
+	}
+	// status
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_string("reason\0", dh);
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_colon(dh);
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_gpgme_error(key->reason, dh);
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_right_brace(dh);
+	}
+	return err;
+}
+
+gpgme_error_t jsonify_gpgme_new_signature(gpgme_new_signature_t sig, gpgme_data_t dh) {
+	gpgme_error_t err = jsonify_left_brace(dh);
+	// sig type
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_string("type\0", gpgme_sig_mode_string(sig->type), dh, true);
+	}
+	// pk algo
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_string("pubkey_algo\0", gpgme_pubkey_algo_name(sig->pubkey_algo), dh, true);
+	}
+	// hash algo
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_string("hash_algo\0", gpgme_hash_algo_name(sig->hash_algo), dh, true);
+	}
+	// sig class
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_int("sig_class\0", sig->sig_class, dh, true);
+	}
+	// timestamp
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_int("timestamp\0", sig->timestamp, dh, true);
+	}
+	// fpr
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_string("fpr\0", sig->fpr, dh, false);
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_right_brace(dh);
+	}
+	return err;
+}
+
+gpgme_error_t jsonify_gpgme_sign_result(gpgme_sign_result_t result, gpgme_data_t dh) {
+	gpgme_error_t err = jsonify_left_brace(dh);
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_string("invalid_signers\0", dh);
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_colon(dh);
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_left_square_bracket(dh);
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		gpgme_invalid_key_t siner = result->invalid_signers;
+		while (siner != NULL) {
+			err = jsonify_gpgme_invalid_key(siner, dh);
+			if (err != GPG_ERR_NO_ERROR) {
+				break;
+			}
+			if (siner->next) {
+				err = jsonify_comma(dh);
+				if (err != GPG_ERR_NO_ERROR) {
+					break;
+				}
+			}
+			siner = siner->next;
+		}
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_right_square_bracket(dh);
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_comma(dh);
+	}
+	// signatures
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_string("signatures\0", dh);
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_colon(dh);
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_left_square_bracket(dh);
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		gpgme_new_signature_t sig = result->signatures;
+		while (sig != NULL) {
+			err = jsonify_gpgme_new_signature(sig, dh);
 			if (err != GPG_ERR_NO_ERROR) {
 				break;
 			}

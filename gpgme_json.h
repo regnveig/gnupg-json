@@ -9,6 +9,7 @@ const char *gpgme_pinentry_mode_string(gpgme_pinentry_mode_t val);
 const char *gpgme_data_encoding_string(gpgme_data_encoding_t val);
 const char *gpgme_data_type_string(gpgme_data_type_t val);
 const char *pka_trust_string(unsigned int val);
+const char *gpgme_sig_mode_string(gpgme_sig_mode_t val);
 
 // jsonify structs
 gpgme_error_t jsonify_gpgme_error(gpgme_error_t error, gpgme_data_t dh);
@@ -24,5 +25,8 @@ gpgme_error_t jsonify_ctx(gpgme_ctx_t ctx, gpgme_data_t dh);
 gpgme_error_t jsonify_gpgme_data(gpgme_data_t data, gpgme_data_t dh);
 gpgme_error_t jsonify_gpgme_signature(gpgme_signature_t sig, gpgme_data_t dh);
 gpgme_error_t jsonify_gpgme_verify_result(gpgme_verify_result_t result, gpgme_data_t dh);
+gpgme_error_t jsonify_gpgme_invalid_key(gpgme_invalid_key_t key, gpgme_data_t dh);
+gpgme_error_t jsonify_gpgme_new_signature(gpgme_new_signature_t sig, gpgme_data_t dh);
+gpgme_error_t jsonify_gpgme_sign_result(gpgme_sign_result_t result, gpgme_data_t dh);
 
 #endif

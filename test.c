@@ -47,7 +47,6 @@ void test_key() {
 	} else {
 		gpgme_data_release(json);
 	}
-	
 }
 
 void test_data() {
@@ -127,6 +126,57 @@ void test_verify() {
 	}
 }
 
+void test_sign() {
+	gpgme_ctx_t ctx;
+	gpgme_data_t data;
+	gpgme_data_t signed_message;
+	gpgme_data_t json;
+	gpgme_key_t key;
+	gpgme_error_t err = set_context(&ctx);
+	if (err == GPG_ERR_NO_ERROR) {
+		err = gpgme_data_new(&json);
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		err = gpgme_data_new(&data);
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		err = gpgme_data_new(&signed_message);
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		err = gpgme_get_key(ctx, "A1662AA073AE46CD6FE88CDB8D12EDFB66827FA2", &key, 0);
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		err = gpgme_signers_add(ctx, key);
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		err = gpgme_data_new_from_file(&data, ".test_plain.txt", 1);
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		err = gpgme_op_sign(ctx, data, signed_message, GPGME_SIG_MODE_CLEAR);
+		gpgme_key_release(key);
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		gpgme_sign_result_t result = gpgme_op_sign_result(ctx);
+		err = jsonify_gpgme_sign_result(result, json);
+		gpgme_data_release(data);
+		gpgme_data_release(signed_message);
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		ssize_t length = gpgme_data_write(json, "\0", 1);
+		if (length != 1) {
+			err = GPG_ERR_ENOMEM;
+		}
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		char *plaintext = gpgme_data_release_and_get_mem(json, NULL);
+		fprintf(stdout, "%s\n", plaintext);
+		gpgme_free(plaintext);
+		gpgme_release(ctx);
+	} else {
+		gpgme_data_release(json);
+	}
+}
+
 void test_ctx() {
 	gpgme_ctx_t ctx;
 	gpgme_data_t json;
@@ -159,5 +209,6 @@ int main() {
 	test_ctx();
 	test_data();
 	test_verify();
+	test_sign();
 	return 0;
 } 
