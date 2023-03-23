@@ -235,10 +235,12 @@ gpgme_error_t jsonify_gpgme_subkey(gpgme_subkey_t key, gpgme_data_t dh) {
 		err = jsonify_key_string("fingerprint\0", key->fpr, dh, 1);
 	}
 	// keygrip
-	if ((key->keygrip != NULL) && (err == GPG_ERR_NO_ERROR)) {
-		err = jsonify_key_string("keygrip\0", key->keygrip, dh, 1);
-	} else {
-		err = jsonify_key_null("keygrip\0", dh, 1);
+	if (err == GPG_ERR_NO_ERROR) {
+		if (key->keygrip != NULL) {
+			err = jsonify_key_string("keygrip\0", key->keygrip, dh, 1);
+		} else {
+			err = jsonify_key_null("keygrip\0", dh, 1);
+		}
 	}
 	// timestamp
 	if (err == GPG_ERR_NO_ERROR) {
@@ -253,16 +255,20 @@ gpgme_error_t jsonify_gpgme_subkey(gpgme_subkey_t key, gpgme_data_t dh) {
 		err = jsonify_key_bool("is_cardkey\0", key->is_cardkey, dh, 1);
 	}
 	// card number
-	if ((key->card_number != NULL) && (err == GPG_ERR_NO_ERROR)) {
-		err = jsonify_key_string("card_number\0", key->card_number, dh, 1);
-	} else {
-		err = jsonify_key_null("card_number\0", dh, 1);
+	if (err == GPG_ERR_NO_ERROR) {
+		if (key->card_number != NULL) {
+			err = jsonify_key_string("card_number\0", key->card_number, dh, 1);
+		} else {
+			err = jsonify_key_null("card_number\0", dh, 1);
+		}
 	}
 	// curve
-	if ((key->curve != NULL) && (err == GPG_ERR_NO_ERROR)) {
-		err = jsonify_key_string("curve\0", key->curve, dh, 0);
-	} else {
-		err = jsonify_key_null("curve\0", dh, 0);
+	if (err == GPG_ERR_NO_ERROR) {
+		if (key->curve != NULL) {
+			err = jsonify_key_string("curve\0", key->curve, dh, 0);
+		} else {
+			err = jsonify_key_null("curve\0", dh, 0);
+		}
 	}
 	if (err == GPG_ERR_NO_ERROR) {
 		err = jsonify_right_brace(dh);
@@ -271,521 +277,423 @@ gpgme_error_t jsonify_gpgme_subkey(gpgme_subkey_t key, gpgme_data_t dh) {
 }
 
 gpgme_error_t jsonify_gpgme_sig_notation(gpgme_sig_notation_t note, gpgme_data_t dh) {
-	gpgme_error_t err;
-	err = jsonify_left_brace(dh);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
-	}
-	err = jsonify_key_string("sig_notation\0", "not_implemented\0", dh, 0);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	gpgme_error_t err = jsonify_left_brace(dh);
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_string("sig_notation\0", "not_implemented\0", dh, 0);
 	}
 	// TODO
-	err = jsonify_right_brace(dh);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_right_brace(dh);
 	}
-	return GPG_ERR_NO_ERROR;
+	return err;
 }
 
 gpgme_error_t jsonify_gpgme_tofu_info(gpgme_tofu_info_t info, gpgme_data_t dh) {
-	gpgme_error_t err;
-	err = jsonify_left_brace(dh);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
-	}
-	err = jsonify_key_string("tofu_info\0", "not_implemented\0", dh, 0);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	gpgme_error_t err = jsonify_left_brace(dh);
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_string("tofu_info\0", "not_implemented\0", dh, 0);
 	}
 	// TODO
-	err = jsonify_right_brace(dh);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_right_brace(dh);
 	}
-	return GPG_ERR_NO_ERROR;
+	return err;
 }
 
 gpgme_error_t jsonify_gpgme_key_sig(gpgme_key_sig_t sig, gpgme_data_t dh) {
-	gpgme_error_t err;
-	err = jsonify_left_brace(dh);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
-	}
+	gpgme_error_t err = jsonify_left_brace(dh);
 	// is revoked ?
-	err = jsonify_key_bool("revoked\0", sig->revoked, dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_bool("revoked\0", sig->revoked, dh, 1);
 	}
 	// is expired ?
-	err = jsonify_key_bool("expired\0", sig->expired, dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_bool("expired\0", sig->expired, dh, 1);
 	}
 	// is invalid ?
-	err = jsonify_key_bool("invalid\0", sig->invalid, dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_bool("invalid\0", sig->invalid, dh, 1);
 	}
 	// is exportable ?
-	err = jsonify_key_bool("exportable\0", sig->exportable, dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_bool("exportable\0", sig->exportable, dh, 1);
 	}
 	// trust depth
-	err = jsonify_key_int("trust_depth\0", sig->trust_depth, dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_int("trust_depth\0", sig->trust_depth, dh, 1);
 	}
 	// trust value
-	err = jsonify_key_int("trust_value\0", sig->trust_value, dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_int("trust_value\0", sig->trust_value, dh, 1);
 	}
 	// algo
-	err = jsonify_key_string("pubkey_algo\0", gpgme_pubkey_algo_name(sig->pubkey_algo), dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_string("pubkey_algo\0", gpgme_pubkey_algo_name(sig->pubkey_algo), dh, 1);
 	}
 	// keyid
-	err = jsonify_key_string("keyid\0", sig->keyid, dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_string("keyid\0", sig->keyid, dh, 1);
 	}
 	// timestamp
-	err = jsonify_key_int("timestamp\0", sig->timestamp, dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_int("timestamp\0", sig->timestamp, dh, 1);
 	}
 	// expires
-	err = jsonify_key_int("expires\0", sig->expires, dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_int("expires\0", sig->expires, dh, 1);
 	}
 	// trust scope
-	if (sig->trust_scope != NULL) {
-		err = jsonify_key_string("trust_scope\0", sig->trust_scope, dh, 1);
-	} else {
-		err = jsonify_key_null("trust_scope\0", dh, 1);
-	}
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		if (sig->trust_scope != NULL) {
+			err = jsonify_key_string("trust_scope\0", sig->trust_scope, dh, 1);
+		} else {
+			err = jsonify_key_null("trust_scope\0", dh, 1);
+		}
 	}
 	// status
-	err = jsonify_string("status\0", dh);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_string("status\0", dh);
 	}
-	err = jsonify_colon(dh);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_colon(dh);
 	}
-	err = jsonify_gpgme_error(sig->status, dh);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_gpgme_error(sig->status, dh);
 	}
-	err = jsonify_comma(dh);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_comma(dh);
 	}
 	// sig class
-	err = jsonify_key_int("sig_class\0", sig->sig_class, dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_int("sig_class\0", sig->sig_class, dh, 1);
 	}
 	// uid
-	err = jsonify_key_string("uid\0", sig->uid, dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_string("uid\0", sig->uid, dh, 1);
 	}
 	// name
-	if (strlen(sig->name)) {
-		err = jsonify_key_string("name\0", sig->name, dh, 1);
-	} else {
-		err = jsonify_key_null("name\0", dh, 1);
-	}
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		if (strlen(sig->name)) {
+			err = jsonify_key_string("name\0", sig->name, dh, 1);
+		} else {
+			err = jsonify_key_null("name\0", dh, 1);
+		}
 	}
 	// comment
-	if (strlen(sig->comment)) {
-		err = jsonify_key_string("comment\0", sig->comment, dh, 1);
-	} else {
-		err = jsonify_key_null("comment\0", dh, 1);
-	}
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		if (strlen(sig->comment)) {
+			err = jsonify_key_string("comment\0", sig->comment, dh, 1);
+		} else {
+			err = jsonify_key_null("comment\0", dh, 1);
+		}
 	}
 	// email
-	if (strlen(sig->email)) {
-		err = jsonify_key_string("email\0", sig->email, dh, 1);
-	} else {
-		err = jsonify_key_null("email\0", dh, 1);
-	}
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		if (strlen(sig->email)) {
+			err = jsonify_key_string("email\0", sig->email, dh, 1);
+		} else {
+			err = jsonify_key_null("email\0", dh, 1);
+		}
 	}
 	// notations
-	err = jsonify_string("notations\0", dh);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_string("notations\0", dh);
 	}
-	err = jsonify_colon(dh);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_colon(dh);
 	}
-	err = jsonify_left_square_bracket(dh);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_left_square_bracket(dh);
 	}
-	gpgme_sig_notation_t note = sig->notations;
-	while (note) {
-		err = jsonify_gpgme_sig_notation(note, dh);
-		if (err != GPG_ERR_NO_ERROR) {
-			break;
-		}
-		if (note->next) {
-			err = jsonify_comma(dh);
+	if (err == GPG_ERR_NO_ERROR) {
+		gpgme_sig_notation_t note = sig->notations;
+		while (note) {
+			err = jsonify_gpgme_sig_notation(note, dh);
 			if (err != GPG_ERR_NO_ERROR) {
 				break;
 			}
+			if (note->next) {
+				err = jsonify_comma(dh);
+				if (err != GPG_ERR_NO_ERROR) {
+					break;
+				}
+			}
+			note = note->next;
 		}
-		note = note->next;
 	}
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_right_square_bracket(dh);
 	}
-	err = jsonify_right_square_bracket(dh);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_right_brace(dh);
 	}
-	err = jsonify_right_brace(dh);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
-	}
-	return GPG_ERR_NO_ERROR;
+	return err;
 }
 
 gpgme_error_t jsonify_gpgme_user_id(gpgme_user_id_t uid, gpgme_data_t dh) {
-	gpgme_error_t err;
-	err = jsonify_left_brace(dh);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
-	}
+	gpgme_error_t err = jsonify_left_brace(dh);
 	// revoked ?
-	err = jsonify_key_bool("revoked\0", uid->revoked, dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_bool("revoked\0", uid->revoked, dh, 1);
 	}
 	// invalid ?
-	err = jsonify_key_bool("invalid\0", uid->invalid, dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_bool("invalid\0", uid->invalid, dh, 1);
 	}
 	// validity
-	err = jsonify_key_string("validity\0", gpgme_validity_string(uid->validity), dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_string("validity\0", gpgme_validity_string(uid->validity), dh, 1);
 	}
 	// uid
-	err = jsonify_key_string("uid\0", uid->uid, dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_string("uid\0", uid->uid, dh, 1);
 	}
 	// name
-	if (strlen(uid->name)) {
-		err = jsonify_key_string("name\0", uid->name, dh, 1);
-	} else {
-		err = jsonify_key_null("name\0", dh, 1);
-	}
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		if (strlen(uid->name)) {
+			err = jsonify_key_string("name\0", uid->name, dh, 1);
+		} else {
+			err = jsonify_key_null("name\0", dh, 1);
+		}
 	}
 	// comment
-	if (strlen(uid->comment)) {
-		err = jsonify_key_string("comment\0", uid->comment, dh, 1);
-	} else {
-		err = jsonify_key_null("comment\0", dh, 1);
-	}
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		if (strlen(uid->comment)) {
+			err = jsonify_key_string("comment\0", uid->comment, dh, 1);
+		} else {
+			err = jsonify_key_null("comment\0", dh, 1);
+		}
 	}
 	// email
-	if (strlen(uid->email)) {
-		err = jsonify_key_string("email\0", uid->email, dh, 1);
-	} else {
-		err = jsonify_key_null("email\0", dh, 1);
-	}
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		if (strlen(uid->email)) {
+			err = jsonify_key_string("email\0", uid->email, dh, 1);
+		} else {
+			err = jsonify_key_null("email\0", dh, 1);
+		}
 	}
 	// address
-	if (uid->address != NULL) {
-		err = jsonify_key_string("address\0", uid->address, dh, 1);
-	} else {
-		err = jsonify_key_null("address\0", dh, 1);
-	}
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		if (uid->address != NULL) {
+			err = jsonify_key_string("address\0", uid->address, dh, 1);
+		} else {
+			err = jsonify_key_null("address\0", dh, 1);
+		}
 	}
 	// TOFU info
-	err = jsonify_string("tofu\0", dh);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_string("tofu\0", dh);
 	}
-	err = jsonify_colon(dh);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_colon(dh);
 	}
-	err = jsonify_left_square_bracket(dh);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_left_square_bracket(dh);
 	}
-	gpgme_tofu_info_t info = uid->tofu;
-	while (info) {
-		err = jsonify_gpgme_tofu_info(info, dh);
-		if (err != GPG_ERR_NO_ERROR) {
-			break;
-		}
-		if (info->next) {
-			err = jsonify_comma(dh);
+	if (err == GPG_ERR_NO_ERROR) {
+		gpgme_tofu_info_t info = uid->tofu;
+		while (info) {
+			err = jsonify_gpgme_tofu_info(info, dh);
 			if (err != GPG_ERR_NO_ERROR) {
 				break;
 			}
+			if (info->next) {
+				err = jsonify_comma(dh);
+				if (err != GPG_ERR_NO_ERROR) {
+					break;
+				}
+			}
+			info = info->next;
 		}
-		info = info->next;
 	}
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_right_square_bracket(dh);
 	}
-	err = jsonify_right_square_bracket(dh);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
-	}
-	err = jsonify_comma(dh);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_comma(dh);
 	}
 	// signatures
-	err = jsonify_string("signatures\0", dh);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_string("signatures\0", dh);
 	}
-	err = jsonify_colon(dh);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_colon(dh);
 	}
-	err = jsonify_left_square_bracket(dh);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_left_square_bracket(dh);
 	}
-	gpgme_key_sig_t sig = uid->signatures;
-	while (sig) {
-		err = jsonify_gpgme_key_sig(sig, dh);
-		if (err != GPG_ERR_NO_ERROR) {
-			break;
-		}
-		if (sig->next) {
-			err = jsonify_comma(dh);
+	if (err == GPG_ERR_NO_ERROR) {
+		gpgme_key_sig_t sig = uid->signatures;
+		while (sig) {
+			err = jsonify_gpgme_key_sig(sig, dh);
 			if (err != GPG_ERR_NO_ERROR) {
 				break;
 			}
+			if (sig->next) {
+				err = jsonify_comma(dh);
+				if (err != GPG_ERR_NO_ERROR) {
+					break;
+				}
+			}
+			sig = sig->next;
 		}
-		sig = sig->next;
 	}
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_right_square_bracket(dh);
 	}
-	err = jsonify_right_square_bracket(dh);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_right_brace(dh);
 	}
-	err = jsonify_right_brace(dh);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
-	}
-	return GPG_ERR_NO_ERROR;
+	return err;
 }
 
 gpgme_error_t jsonify_gpgme_key(gpgme_key_t key, gpgme_data_t dh) {
-	gpgme_error_t err;
-	err = jsonify_left_brace(dh);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
-	}
+	gpgme_error_t err = jsonify_left_brace(dh);
 	// revoked ?
-	err = jsonify_key_bool("revoked\0", key->revoked, dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_bool("revoked\0", key->revoked, dh, 1);
 	}
 	// expired ?
-	err = jsonify_key_bool("expired\0", key->expired, dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_bool("expired\0", key->expired, dh, 1);
 	}
 	// disabled ?
-	err = jsonify_key_bool("disabled\0", key->disabled, dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_bool("disabled\0", key->disabled, dh, 1);
 	}
 	// invalid ?
-	err = jsonify_key_bool("invalid\0", key->invalid, dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_bool("invalid\0", key->invalid, dh, 1);
 	}
 	// can encrypt ?
-	err = jsonify_key_bool("can_encrypt\0", key->can_encrypt, dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_bool("can_encrypt\0", key->can_encrypt, dh, 1);
 	}
 	// can sign ?
-	err = jsonify_key_bool("can_sign\0", key->can_sign, dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_bool("can_sign\0", key->can_sign, dh, 1);
 	}
 	// can certify ?
-	err = jsonify_key_bool("can_certify\0", key->can_certify, dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_bool("can_certify\0", key->can_certify, dh, 1);
 	}
 	// can authenticate ?
-	err = jsonify_key_bool("can_authenticate\0", key->can_authenticate, dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_bool("can_authenticate\0", key->can_authenticate, dh, 1);
 	}
 	// is qualified ?
-	err = jsonify_key_bool("is_qualified\0", key->is_qualified, dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_bool("is_qualified\0", key->is_qualified, dh, 1);
 	}
 	// is secret ?
-	err = jsonify_key_bool("secret\0", key->secret, dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_bool("secret\0", key->secret, dh, 1);
 	}
 	// protocol
-	err = jsonify_key_string("protocol\0", gpgme_get_protocol_name(key->protocol), dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_string("protocol\0", gpgme_get_protocol_name(key->protocol), dh, 1);
 	}
 	// issuer serial
-	if (key->protocol == GPGME_PROTOCOL_CMS) {
-		err = jsonify_key_string("issuer_serial\0", key->issuer_serial, dh, 1);
-	} else {
-		err = jsonify_key_null("issuer_serial\0", dh, 1);
-	}
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		if (key->protocol == GPGME_PROTOCOL_CMS) {
+			err = jsonify_key_string("issuer_serial\0", key->issuer_serial, dh, 1);
+		} else {
+			err = jsonify_key_null("issuer_serial\0", dh, 1);
+		}
 	}
 	// issuer name
-	if (key->protocol == GPGME_PROTOCOL_CMS) {
-		err = jsonify_key_string("issuer_name\0", key->issuer_name, dh, 1);
-	} else {
-		err = jsonify_key_null("issuer_name\0", dh, 1);
-	}
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		if (key->protocol == GPGME_PROTOCOL_CMS) {
+			err = jsonify_key_string("issuer_name\0", key->issuer_name, dh, 1);
+		} else {
+			err = jsonify_key_null("issuer_name\0", dh, 1);
+		}
 	}
 	// chain id
-	if (key->protocol == GPGME_PROTOCOL_CMS) {
-		err = jsonify_key_string("chain_id\0", key->chain_id, dh, 1);
-	} else {
-		err = jsonify_key_null("chain_id\0", dh, 1);
-	}
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		if (key->protocol == GPGME_PROTOCOL_CMS) {
+			err = jsonify_key_string("chain_id\0", key->chain_id, dh, 1);
+		} else {
+			err = jsonify_key_null("chain_id\0", dh, 1);
+		}
 	}
 	// owner trust
-	if (key->protocol == GPGME_PROTOCOL_OpenPGP) {
-		err = jsonify_key_string("owner_trust\0", gpgme_validity_string(key->owner_trust), dh, 1);
-	} else {
-		err = jsonify_key_null("owner_trust\0", dh, 1);
-	}
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		if (key->protocol == GPGME_PROTOCOL_OpenPGP) {
+			err = jsonify_key_string("owner_trust\0", gpgme_validity_string(key->owner_trust), dh, 1);
+		} else {
+			err = jsonify_key_null("owner_trust\0", dh, 1);
+		}
 	}
 	// fpr
-	err = jsonify_key_string("fingerprint\0", key->fpr, dh, 1);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_string("fingerprint\0", key->fpr, dh, 1);
 	}
 	// subkeys
-	err = jsonify_string("subkeys\0", dh);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_string("subkeys\0", dh);
 	}
-	err = jsonify_colon(dh);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_colon(dh);
 	}
-	err = jsonify_left_square_bracket(dh);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_left_square_bracket(dh);
 	}
-	gpgme_subkey_t subkey = key->subkeys;
-	while (subkey) {
-		err = jsonify_gpgme_subkey(subkey, dh);
-		if (err != GPG_ERR_NO_ERROR) {
-			break;
-		}
-		if (subkey->next) {
-			err = jsonify_comma(dh);
+	if (err == GPG_ERR_NO_ERROR) {
+		gpgme_subkey_t subkey = key->subkeys;
+		while (subkey) {
+			err = jsonify_gpgme_subkey(subkey, dh);
 			if (err != GPG_ERR_NO_ERROR) {
 				break;
 			}
+			if (subkey->next) {
+				err = jsonify_comma(dh);
+				if (err != GPG_ERR_NO_ERROR) {
+					break;
+				}
+			}
+			subkey = subkey->next;
 		}
-		subkey = subkey->next;
 	}
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_right_square_bracket(dh);
 	}
-	err = jsonify_right_square_bracket(dh);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
-	}
-	err = jsonify_comma(dh);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_comma(dh);
 	}
 	// uids
-	err = jsonify_string("uids\0", dh);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_string("uids\0", dh);
 	}
-	err = jsonify_colon(dh);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_colon(dh);
 	}
-	err = jsonify_left_square_bracket(dh);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_left_square_bracket(dh);
 	}
-	gpgme_user_id_t uid = key->uids;
-	while (uid) {
-		err = jsonify_gpgme_user_id(uid, dh);
-		if (err != GPG_ERR_NO_ERROR) {
-			break;
-		}
-		if (uid->next) {
-			err = jsonify_comma(dh);
+	if (err == GPG_ERR_NO_ERROR) {
+		gpgme_user_id_t uid = key->uids;
+		while (uid) {
+			err = jsonify_gpgme_user_id(uid, dh);
 			if (err != GPG_ERR_NO_ERROR) {
 				break;
 			}
+			if (uid->next) {
+				err = jsonify_comma(dh);
+				if (err != GPG_ERR_NO_ERROR) {
+					break;
+				}
+			}
+			uid = uid->next;
 		}
-		uid = uid->next;
 	}
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_right_square_bracket(dh);
 	}
-	err = jsonify_right_square_bracket(dh);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_right_brace(dh);
 	}
-	err = jsonify_right_brace(dh);
-	if (err != GPG_ERR_NO_ERROR) {
-		return err;
-	}
-	return GPG_ERR_NO_ERROR;
+	return err;
 }
 
 gpgme_error_t jsonify_gpgme_engine_info(gpgme_engine_info_t engine, gpgme_data_t dh) {
