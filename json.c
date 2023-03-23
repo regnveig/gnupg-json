@@ -1,40 +1,40 @@
 #include "json.h"
 
 gpgme_error_t jsonify_left_brace(gpgme_data_t dh) {
-	if (gpgme_data_write(dh, "{", 1) != 1) return GPG_ERR_USER_1;
+	if (gpgme_data_write(dh, "{\0", 1) != 1) return GPG_ERR_USER_1;
 	return GPG_ERR_NO_ERROR;
 }
 
 gpgme_error_t jsonify_right_brace(gpgme_data_t dh) {
-	if (gpgme_data_write(dh, "}", 1) != 1) return GPG_ERR_USER_1;
+	if (gpgme_data_write(dh, "}\0", 1) != 1) return GPG_ERR_USER_1;
 	return GPG_ERR_NO_ERROR;
 }
 
 gpgme_error_t jsonify_left_square_bracket(gpgme_data_t dh) {
-	if (gpgme_data_write(dh, "[", 1) != 1) return GPG_ERR_USER_1;
+	if (gpgme_data_write(dh, "[\0", 1) != 1) return GPG_ERR_USER_1;
 	return GPG_ERR_NO_ERROR;
 }
 
 gpgme_error_t jsonify_right_square_bracket(gpgme_data_t dh) {
-	if (gpgme_data_write(dh, "]", 1) != 1) return GPG_ERR_USER_1;
+	if (gpgme_data_write(dh, "]\0", 1) != 1) return GPG_ERR_USER_1;
 	return GPG_ERR_NO_ERROR;
 }
 
 gpgme_error_t jsonify_comma(gpgme_data_t dh) {
-	if (gpgme_data_write(dh, ", ", 2) != 2) return GPG_ERR_USER_1;
+	if (gpgme_data_write(dh, ", \0", 2) != 2) return GPG_ERR_USER_1;
 	return GPG_ERR_NO_ERROR;
 }
 
 gpgme_error_t jsonify_colon(gpgme_data_t dh) {
-	if (gpgme_data_write(dh, ": ", 2) != 2) return GPG_ERR_USER_1;
+	if (gpgme_data_write(dh, ": \0", 2) != 2) return GPG_ERR_USER_1;
 	return GPG_ERR_NO_ERROR;
 }
 
 gpgme_error_t jsonify_bool(int num, gpgme_data_t dh) {
 	if (num) {
-		if (gpgme_data_write(dh, "true", 4) != 4) return GPG_ERR_USER_1;
+		if (gpgme_data_write(dh, "true\0", 4) != 4) return GPG_ERR_USER_1;
 	} else {
-		if (gpgme_data_write(dh, "false", 5) != 5) return GPG_ERR_USER_1;
+		if (gpgme_data_write(dh, "false\0", 5) != 5) return GPG_ERR_USER_1;
 	}
 	return GPG_ERR_NO_ERROR;
 }
@@ -61,19 +61,19 @@ gpgme_error_t jsonify_string(const char *str, gpgme_data_t dh) {
 gpgme_error_t jsonify_int(int num, gpgme_data_t dh) {
 	size_t len;
 	if (abs(num)) {
-		len = floor(log10(abs(num)) + 1) * sizeof(char);
+		len = floor(log10(abs(num)) + 2) * sizeof(char);
 		if (num < 0) len++;
 	} else {
-		len = 1;
+		len = 2;
 	}
 	char str[len];
-	sprintf(str, "%d", num);
-	if (gpgme_data_write(dh, str, len) != len) return GPG_ERR_USER_1;
+	sprintf(str, "%d%c", num, '\0');
+	if (gpgme_data_write(dh, str, len - 1) != (len - 1)) return GPG_ERR_USER_1;
 	return GPG_ERR_NO_ERROR;
 }
 
 gpgme_error_t jsonify_null(gpgme_data_t dh) {
-	if (gpgme_data_write(dh, "null", 4) != 4) return GPG_ERR_USER_1;
+	if (gpgme_data_write(dh, "null\0", 4) != 4) return GPG_ERR_USER_1;
 	return GPG_ERR_NO_ERROR;
 }
 

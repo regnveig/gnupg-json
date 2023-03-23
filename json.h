@@ -7,8 +7,10 @@
 #ifndef JSON_H
 #define JSON_H
 
-static const char * C_QUOTE = "\""; static const int C_QUOTE_LEN = 1;
-static const char * C_SLASH = "\\"; static const int C_SLASH_LEN = 1;
+static const char * C_QUOTE = "\"\0";
+static const int C_QUOTE_LEN = 1;
+static const char * C_SLASH = "\\\0";
+static const int C_SLASH_LEN = 1;
 
 // JSON elements
 gpgme_error_t jsonify_left_brace(gpgme_data_t dh);
