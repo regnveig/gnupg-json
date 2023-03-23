@@ -1,40 +1,40 @@
 #include "json.h"
 
 gpgme_error_t jsonify_left_brace(gpgme_data_t dh) {
-	if (gpgme_data_write(dh, "{\0", 1) != 1) return GPG_ERR_USER_1;
+	if (gpgme_data_write(dh, C_LEFT_BRACE, C_LEFT_BRACE_LEN) != C_LEFT_BRACE_LEN) return GPG_ERR_USER_1;
 	return GPG_ERR_NO_ERROR;
 }
 
 gpgme_error_t jsonify_right_brace(gpgme_data_t dh) {
-	if (gpgme_data_write(dh, "}\0", 1) != 1) return GPG_ERR_USER_1;
+	if (gpgme_data_write(dh, C_RIGHT_BRACE, C_RIGHT_BRACE_LEN) != C_RIGHT_BRACE_LEN) return GPG_ERR_USER_1;
 	return GPG_ERR_NO_ERROR;
 }
 
 gpgme_error_t jsonify_left_square_bracket(gpgme_data_t dh) {
-	if (gpgme_data_write(dh, "[\0", 1) != 1) return GPG_ERR_USER_1;
+	if (gpgme_data_write(dh, C_LEFT_SQUARE_BRACKET, C_LEFT_SQUARE_BRACKET_LEN) != C_LEFT_SQUARE_BRACKET_LEN) return GPG_ERR_USER_1;
 	return GPG_ERR_NO_ERROR;
 }
 
 gpgme_error_t jsonify_right_square_bracket(gpgme_data_t dh) {
-	if (gpgme_data_write(dh, "]\0", 1) != 1) return GPG_ERR_USER_1;
+	if (gpgme_data_write(dh, C_RIGHT_SQUARE_BRACKET, C_RIGHT_SQUARE_BRACKET_LEN) != C_RIGHT_SQUARE_BRACKET_LEN) return GPG_ERR_USER_1;
 	return GPG_ERR_NO_ERROR;
 }
 
 gpgme_error_t jsonify_comma(gpgme_data_t dh) {
-	if (gpgme_data_write(dh, ", \0", 2) != 2) return GPG_ERR_USER_1;
+	if (gpgme_data_write(dh, C_COMMA, C_COMMA_LEN) != C_COMMA_LEN) return GPG_ERR_USER_1;
 	return GPG_ERR_NO_ERROR;
 }
 
 gpgme_error_t jsonify_colon(gpgme_data_t dh) {
-	if (gpgme_data_write(dh, ": \0", 2) != 2) return GPG_ERR_USER_1;
+	if (gpgme_data_write(dh, C_COLON, C_COLON_LEN) != C_COLON_LEN) return GPG_ERR_USER_1;
 	return GPG_ERR_NO_ERROR;
 }
 
 gpgme_error_t jsonify_bool(int num, gpgme_data_t dh) {
 	if (num) {
-		if (gpgme_data_write(dh, "true\0", 4) != 4) return GPG_ERR_USER_1;
+		if (gpgme_data_write(dh, C_TRUE_STRING, C_TRUE_STRING_LEN) != C_TRUE_STRING_LEN) return GPG_ERR_USER_1;
 	} else {
-		if (gpgme_data_write(dh, "false\0", 5) != 5) return GPG_ERR_USER_1;
+		if (gpgme_data_write(dh, C_FALSE_STRING, C_FALSE_STRING_LEN) != C_FALSE_STRING_LEN) return GPG_ERR_USER_1;
 	}
 	return GPG_ERR_NO_ERROR;
 }
@@ -73,7 +73,7 @@ gpgme_error_t jsonify_int(int num, gpgme_data_t dh) {
 }
 
 gpgme_error_t jsonify_null(gpgme_data_t dh) {
-	if (gpgme_data_write(dh, "null\0", 4) != 4) return GPG_ERR_USER_1;
+	if (gpgme_data_write(dh, C_NULL_STRING, C_NULL_STRING_LEN) != C_NULL_STRING_LEN) return GPG_ERR_USER_1;
 	return GPG_ERR_NO_ERROR;
 }
 

@@ -7,10 +7,28 @@
 #ifndef JSON_H
 #define JSON_H
 
-static const char * C_QUOTE = "\"\0";
-static const int C_QUOTE_LEN = 1;
-static const char * C_SLASH = "\\\0";
-static const int C_SLASH_LEN = 1;
+static const char *C_QUOTE = "\"";
+static const size_t C_QUOTE_LEN = 1;
+static const char *C_SLASH = "\\";
+static const size_t C_SLASH_LEN = 1;
+static const char *C_LEFT_BRACE = "{";
+static const size_t C_LEFT_BRACE_LEN = 1;
+static const char *C_RIGHT_BRACE = "}";
+static const size_t C_RIGHT_BRACE_LEN = 1;
+static const char *C_LEFT_SQUARE_BRACKET = "[";
+static const size_t C_LEFT_SQUARE_BRACKET_LEN = 1;
+static const char *C_RIGHT_SQUARE_BRACKET = "]";
+static const size_t C_RIGHT_SQUARE_BRACKET_LEN = 1;
+static const char *C_COMMA = ", ";
+static const size_t C_COMMA_LEN = 2;
+static const char *C_COLON = ": ";
+static const size_t C_COLON_LEN = 2;
+static const char *C_TRUE_STRING = "true";
+static const size_t C_TRUE_STRING_LEN = 4;
+static const char *C_FALSE_STRING = "false";
+static const size_t C_FALSE_STRING_LEN = 5;
+static const char *C_NULL_STRING = "null";
+static const size_t C_NULL_STRING_LEN = 4;
 
 // JSON elements
 gpgme_error_t jsonify_left_brace(gpgme_data_t dh);
