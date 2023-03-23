@@ -207,7 +207,7 @@ gpgme_error_t jsonify_gpgme_subkey(gpgme_subkey_t key, gpgme_data_t dh) {
 		return err;
 	}
 	// keygrip
-	if (key->keygrip) {
+	if (key->keygrip != NULL) {
 		err = jsonify_key_string("keygrip\0", key->keygrip, dh, 1);
 	} else {
 		err = jsonify_key_null("keygrip\0", dh, 1);
@@ -231,7 +231,7 @@ gpgme_error_t jsonify_gpgme_subkey(gpgme_subkey_t key, gpgme_data_t dh) {
 		return err;
 	}
 	// card number
-	if (key->card_number) {
+	if (key->card_number != NULL) {
 		err = jsonify_key_string("card_number\0", key->card_number, dh, 1);
 	} else {
 		err = jsonify_key_null("card_number\0", dh, 1);
@@ -240,7 +240,7 @@ gpgme_error_t jsonify_gpgme_subkey(gpgme_subkey_t key, gpgme_data_t dh) {
 		return err;
 	}
 	// curve
-	if (key->curve) {
+	if (key->curve != NULL) {
 		err = jsonify_key_string("curve\0", key->curve, dh, 0);
 	} else {
 		err = jsonify_key_null("curve\0", dh, 0);
@@ -348,7 +348,7 @@ gpgme_error_t jsonify_gpgme_key_sig(gpgme_key_sig_t sig, gpgme_data_t dh) {
 		return err;
 	}
 	// trust scope
-	if (sig->trust_scope) {
+	if (sig->trust_scope != NULL) {
 		err = jsonify_key_string("trust_scope\0", sig->trust_scope, dh, 1);
 	} else {
 		err = jsonify_key_null("trust_scope\0", dh, 1);
@@ -505,7 +505,7 @@ gpgme_error_t jsonify_gpgme_user_id(gpgme_user_id_t uid, gpgme_data_t dh) {
 		return err;
 	}
 	// address
-	if (uid->address) {
+	if (uid->address != NULL) {
 		err = jsonify_key_string("address\0", uid->address, dh, 1);
 	} else {
 		err = jsonify_key_null("address\0", dh, 1);
@@ -785,7 +785,7 @@ gpgme_error_t jsonify_gpgme_engine_info(gpgme_engine_info_t engine, gpgme_data_t
 		return err;
 	}
 	// file name
-	if (engine->file_name) {
+	if (engine->file_name != NULL) {
 		err = jsonify_key_string("file_name\0", engine->file_name, dh, 1);
 	} else {
 		err = jsonify_key_null("file_name\0", dh, 1);
@@ -794,7 +794,7 @@ gpgme_error_t jsonify_gpgme_engine_info(gpgme_engine_info_t engine, gpgme_data_t
 		return err;
 	}
 	// home dir
-	if (engine->home_dir) {
+	if (engine->home_dir != NULL) {
 		err = jsonify_key_string("home_dir\0", engine->home_dir, dh, 1);
 	} else {
 		err = jsonify_key_null("home_dir\0", dh, 1);
@@ -803,7 +803,7 @@ gpgme_error_t jsonify_gpgme_engine_info(gpgme_engine_info_t engine, gpgme_data_t
 		return err;
 	}
 	// version
-	if (engine->version) {
+	if (engine->version != NULL) {
 		err = jsonify_key_string("version\0", engine->version, dh, 1);
 	} else {
 		err = jsonify_key_null("version\0", dh, 1);
@@ -812,7 +812,7 @@ gpgme_error_t jsonify_gpgme_engine_info(gpgme_engine_info_t engine, gpgme_data_t
 		return err;
 	}
 	// minimum required version
-	if (engine->req_version) {
+	if (engine->req_version != NULL) {
 		err = jsonify_key_string("req_version\0", engine->req_version, dh, 0);
 	} else {
 		err = jsonify_key_null("req_version\0", dh, 0);
@@ -890,7 +890,7 @@ gpgme_error_t jsonify_ctx(gpgme_ctx_t ctx, gpgme_data_t dh) {
 		return err;
 	}
 	// sender
-	if (gpgme_get_sender(ctx)) {
+	if (gpgme_get_sender(ctx) != NULL) {
 		err = jsonify_key_string("sender\0", gpgme_get_sender(ctx), dh, 1);
 	} else {
 		err = jsonify_key_null("sender\0", dh, 1);
@@ -996,7 +996,7 @@ gpgme_error_t jsonify_ctx(gpgme_ctx_t ctx, gpgme_data_t dh) {
 	int comma = 1;
 	while (ctx_flags[i]) {
 		if (!ctx_flags[i + 1]) comma = 0;
-		if (gpgme_get_ctx_flag(ctx, ctx_flags[i])) {
+		if (gpgme_get_ctx_flag(ctx, ctx_flags[i]) != NULL) {
 			err = jsonify_key_string(ctx_flags[i], gpgme_get_ctx_flag(ctx, ctx_flags[i]), dh, comma);
 		} else {
 			err = jsonify_key_null(ctx_flags[i], dh, comma);
@@ -1027,7 +1027,7 @@ gpgme_error_t jsonify_gpgme_data(gpgme_data_t data, gpgme_data_t dh) {
 		return err;
 	}
 	// file name
-	if (gpgme_data_get_file_name(data)) {
+	if (gpgme_data_get_file_name(data) != NULL) {
 		err = jsonify_key_string("file_name\0", gpgme_data_get_file_name(data), dh, 1);
 	} else {
 		err = jsonify_key_null("file_name\0", dh, 1);
@@ -1173,7 +1173,7 @@ gpgme_error_t jsonify_gpgme_signature(gpgme_signature_t sig, gpgme_data_t dh) {
 		return err;
 	}
 	// pka address
-	if (sig->pka_address) {
+	if (sig->pka_address != NULL) {
 		err = jsonify_key_string("pka_address\0", sig->pka_address, dh, 1);
 	} else {
 		err = jsonify_key_null("pka_address\0", dh, 1);
@@ -1190,7 +1190,7 @@ gpgme_error_t jsonify_gpgme_signature(gpgme_signature_t sig, gpgme_data_t dh) {
 	if (err != GPG_ERR_NO_ERROR) {
 		return err;
 	}
-	if (sig->key) {
+	if (sig->key != NULL) {
 		err = jsonify_gpgme_key(sig->key, dh);
 	} else {
 		err = jsonify_null(dh);
@@ -1212,7 +1212,7 @@ gpgme_error_t jsonify_gpgme_verify_result(gpgme_verify_result_t result, gpgme_da
 		return err;
 	}
 	// file name
-	if (result->file_name) {
+	if (result->file_name != NULL) {
 		err = jsonify_key_string("file_name\0", result->file_name, dh, 1);
 	} else {
 		err = jsonify_key_null("file_name\0", dh, 1);
