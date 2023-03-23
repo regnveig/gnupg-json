@@ -32,8 +32,6 @@ void test_key() {
 	}
 	if (err == GPG_ERR_NO_ERROR) {
 		err = jsonify_gpgme_key(key, json);
-	}
-	if (err == GPG_ERR_NO_ERROR) {
 		gpgme_key_release(key);
 	}
 	if (err == GPG_ERR_NO_ERROR) {
@@ -45,8 +43,6 @@ void test_key() {
 	if (err == GPG_ERR_NO_ERROR) {
 		plaintext = gpgme_data_release_and_get_mem(json, NULL);
 		fprintf(stdout, "%s\n", plaintext);
-	}
-	if (err == GPG_ERR_NO_ERROR) {
 		gpgme_free(plaintext);
 		gpgme_release(ctx);
 	} else {
@@ -72,8 +68,6 @@ void test_data() {
 	}
 	if (err == GPG_ERR_NO_ERROR) {
 		err = jsonify_gpgme_data(data, json);
-	}
-	if (err == GPG_ERR_NO_ERROR) {
 		gpgme_data_release(data);
 	}
 	if (err == GPG_ERR_NO_ERROR) {
@@ -85,8 +79,6 @@ void test_data() {
 	if (err == GPG_ERR_NO_ERROR) {
 		plaintext = gpgme_data_release_and_get_mem(json, NULL);
 		fprintf(stdout, "%s\n", plaintext);
-	}
-	if (err == GPG_ERR_NO_ERROR) {
 		gpgme_free(plaintext);
 		gpgme_release(ctx);
 	} else {
@@ -119,8 +111,6 @@ void test_verify() {
 	if (err == GPG_ERR_NO_ERROR) {
 		gpgme_verify_result_t result = gpgme_op_verify_result(ctx);
 		err = jsonify_gpgme_verify_result(result, json);
-	}
-	if (err == GPG_ERR_NO_ERROR) {
 		gpgme_data_release(data);
 		gpgme_data_release(plain);
 	}
@@ -133,8 +123,6 @@ void test_verify() {
 	if (err == GPG_ERR_NO_ERROR) {
 		plaintext = gpgme_data_release_and_get_mem(json, NULL);
 		fprintf(stdout, "%s\n", plaintext);
-	}
-	if (err == GPG_ERR_NO_ERROR) {
 		gpgme_free(plaintext);
 		gpgme_release(ctx);
 	} else {
@@ -162,8 +150,6 @@ void test_ctx() {
 	if (err == GPG_ERR_NO_ERROR) {
 		plaintext = gpgme_data_release_and_get_mem(json, NULL);
 		fprintf(stdout, "%s\n", plaintext);
-	}
-	if (err == GPG_ERR_NO_ERROR) {
 		gpgme_free(plaintext);
 		gpgme_release(ctx);
 	} else {
