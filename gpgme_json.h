@@ -28,5 +28,7 @@ gpgme_error_t jsonify_gpgme_verify_result(gpgme_verify_result_t result, gpgme_da
 gpgme_error_t jsonify_gpgme_invalid_key(gpgme_invalid_key_t key, gpgme_data_t dh);
 gpgme_error_t jsonify_gpgme_new_signature(gpgme_new_signature_t sig, gpgme_data_t dh);
 gpgme_error_t jsonify_gpgme_sign_result(gpgme_sign_result_t result, gpgme_data_t dh);
-
+gpgme_error_t jsonify_gpgme_encrypt_result(gpgme_encrypt_result_t result, gpgme_data_t dh);
+gpgme_error_t jsonify_gpgme_recipient(gpgme_recipient_t rec, gpgme_data_t dh);
+gpgme_error_t jsonify_gpgme_decrypt_result(gpgme_decrypt_result_t result, gpgme_data_t dh);
 #endif

@@ -1237,3 +1237,143 @@ gpgme_error_t jsonify_gpgme_sign_result(gpgme_sign_result_t result, gpgme_data_t
 	}
 	return err;
 }
+
+gpgme_error_t jsonify_gpgme_encrypt_result(gpgme_encrypt_result_t result, gpgme_data_t dh) {
+	gpgme_error_t err = jsonify_left_brace(dh);
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_string("invalid_recipients\0", dh);
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_colon(dh);
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_left_square_bracket(dh);
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		gpgme_invalid_key_t rec = result->invalid_recipients;
+		while (rec != NULL) {
+			err = jsonify_gpgme_invalid_key(rec, dh);
+			if (err != GPG_ERR_NO_ERROR) {
+				break;
+			}
+			if (rec->next) {
+				err = jsonify_comma(dh);
+				if (err != GPG_ERR_NO_ERROR) {
+					break;
+				}
+			}
+			rec = rec->next;
+		}
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_right_square_bracket(dh);
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_right_brace(dh);
+	}
+	return err;
+}
+
+gpgme_error_t jsonify_gpgme_recipient(gpgme_recipient_t rec, gpgme_data_t dh) {
+	gpgme_error_t err = jsonify_left_brace(dh);
+	// algo
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_string("pubkey_algo\0", gpgme_pubkey_algo_name(rec->pubkey_algo), dh, true);
+	}
+	// keyid
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_string("keyid\0", rec->keyid, dh, true);
+	}
+	// status
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_string("status\0", dh);
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_colon(dh);
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_gpgme_error(rec->status, dh);
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_right_brace(dh);
+	}
+	return err;
+}
+
+gpgme_error_t jsonify_gpgme_decrypt_result(gpgme_decrypt_result_t result, gpgme_data_t dh) {
+	gpgme_error_t err = jsonify_left_brace(dh);
+	// unsupported algo
+	if (err == GPG_ERR_NO_ERROR) {
+		if (result->unsupported_algorithm != NULL) {
+			err = jsonify_key_string("unsupported_algorithm\0", result->unsupported_algorithm, dh, true);
+		} else {
+			err = jsonify_key_null("unsupported_algorithm\0", dh, true);
+		}
+	}
+	// wrong key usage
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_bool("wrong_key_usage\0", result->wrong_key_usage, dh, true);
+	}
+	// legacy cipher nomdc
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_bool("legacy_cipher_nomdc\0", result->legacy_cipher_nomdc, dh, true);
+	}
+	// is mime ?
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_bool("is_mime\0", result->is_mime, dh, true);
+	}
+	// is DE VS?
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_bool("is_de_vs\0", result->is_de_vs, dh, true);
+	}
+	// file name
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_string("recipients\0", dh);
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_colon(dh);
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_left_square_bracket(dh);
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		gpgme_recipient_t rec = result->recipients;
+		while (rec != NULL) {
+			err = jsonify_gpgme_recipient(rec, dh);
+			if (err != GPG_ERR_NO_ERROR) {
+				break;
+			}
+			if (rec->next) {
+				err = jsonify_comma(dh);
+				if (err != GPG_ERR_NO_ERROR) {
+					break;
+				}
+			}
+			rec = rec->next;
+		}
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_right_square_bracket(dh);
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_comma(dh);
+	}
+	// file name
+	if (err == GPG_ERR_NO_ERROR) {
+		if (result->file_name != NULL) {
+			err = jsonify_key_string("file_name\0", result->file_name, dh, true);
+		} else {
+			err = jsonify_key_null("file_name\0", dh, true);
+		}
+	}
+	// TODO session key
+	
+	// symkey algo
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_key_string("symkey_algo\0", result->symkey_algo, dh, false);
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		err = jsonify_right_brace(dh);
+	}
+	return err;
+}

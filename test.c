@@ -5,7 +5,7 @@ gpgme_error_t set_context(gpgme_ctx_t *ctx) {
 	gpgme_check_version(NULL);
 	err = gpgme_new(ctx);
 	if (err) return err;
-	const char *engine = gpgme_get_dirinfo("gpg-name");
+	const char *engine = gpgme_get_dirinfo("gpg-name\0");
 	const char *home_dir = NULL;
 	err = gpgme_ctx_set_engine_info(*ctx, GPGME_PROTOCOL_OPENPGP, engine, home_dir);
 	if (err) return err;
@@ -27,7 +27,7 @@ void test_key() {
 		err = gpgme_data_new(&json);
 	}
 	if (err == GPG_ERR_NO_ERROR) {
-		err = gpgme_get_key(ctx, "A1662AA073AE46CD6FE88CDB8D12EDFB66827FA2", &key, 0);
+		err = gpgme_get_key(ctx, "A1662AA073AE46CD6FE88CDB8D12EDFB66827FA2\0", &key, 0);
 	}
 	if (err == GPG_ERR_NO_ERROR) {
 		err = jsonify_gpgme_key(key, json);
@@ -61,7 +61,7 @@ void test_data() {
 		err = gpgme_data_new(&data);
 	}
 	if (err == GPG_ERR_NO_ERROR) {
-		err = gpgme_data_new_from_file(&data, ".test_signed.asc", 1);
+		err = gpgme_data_new_from_file(&data, ".test_signed.asc\0", 1);
 	}
 	if (err == GPG_ERR_NO_ERROR) {
 		err = jsonify_gpgme_data(data, json);
@@ -99,7 +99,7 @@ void test_verify() {
 		err = gpgme_data_new(&plain);
 	}
 	if (err == GPG_ERR_NO_ERROR) {
-		err = gpgme_data_new_from_file(&data, ".test_signed.asc", 1);
+		err = gpgme_data_new_from_file(&data, ".test_signed.asc\0", 1);
 	}
 	if (err == GPG_ERR_NO_ERROR) {
 		err = gpgme_op_verify(ctx, data, NULL, plain);
@@ -143,14 +143,17 @@ void test_sign() {
 		err = gpgme_data_new(&signed_message);
 	}
 	if (err == GPG_ERR_NO_ERROR) {
-		err = gpgme_get_key(ctx, "A1662AA073AE46CD6FE88CDB8D12EDFB66827FA2", &key, 0);
+		err = gpgme_get_key(ctx, "A1662AA073AE46CD6FE88CDB8D12EDFB66827FA2\0", &key, 0);
 	}
 	if (err == GPG_ERR_NO_ERROR) {
 		err = gpgme_signers_add(ctx, key);
 	}
 	if (err == GPG_ERR_NO_ERROR) {
-		err = gpgme_data_new_from_file(&data, ".test_plain.txt", 1);
+		err = gpgme_data_new_from_file(&data, ".test_plain.txt\0", 1);
 	}
+//	if (err == GPG_ERR_NO_ERROR) {
+//		 err = gpgme_sig_notation_add(ctx, "jerk\0", "you\0", GPGME_SIG_NOTATION_HUMAN_READABLE);
+//	}
 	if (err == GPG_ERR_NO_ERROR) {
 		err = gpgme_op_sign(ctx, data, signed_message, GPGME_SIG_MODE_CLEAR);
 		gpgme_key_release(key);
@@ -204,11 +207,113 @@ void test_ctx() {
 	}
 }
 
+void test_encrypt() {
+	gpgme_ctx_t ctx;
+	gpgme_data_t data;
+	gpgme_data_t encrypted_message;
+	gpgme_data_t json;
+	gpgme_key_t key;
+	gpgme_error_t err = set_context(&ctx);
+	if (err == GPG_ERR_NO_ERROR) {
+		err = gpgme_data_new(&json);
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		err = gpgme_data_new(&data);
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		err = gpgme_data_new(&encrypted_message);
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		err = gpgme_get_key(ctx, "A1662AA073AE46CD6FE88CDB8D12EDFB66827FA2\0", &key, 0);
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		err = gpgme_data_new_from_file(&data, ".test_plain.txt\0", 1);
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		gpgme_key_t keys[] = {key, NULL};
+		err = gpgme_op_encrypt(ctx, keys, GPGME_ENCRYPT_NO_COMPRESS, data, encrypted_message);
+		gpgme_key_release(key);
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		gpgme_encrypt_result_t result = gpgme_op_encrypt_result(ctx);
+		err = jsonify_gpgme_encrypt_result(result, json);
+		gpgme_data_release(data);
+		gpgme_data_release(encrypted_message);
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		ssize_t length = gpgme_data_write(json, "\0", 1);
+		if (length != 1) {
+			err = GPG_ERR_ENOMEM;
+		}
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		char *plaintext = gpgme_data_release_and_get_mem(json, NULL);
+		fprintf(stdout, "%s\n", plaintext);
+		gpgme_free(plaintext);
+		gpgme_release(ctx);
+	} else {
+		gpgme_data_release(json);
+	}
+}
+
+void test_decrypt() {
+	gpgme_ctx_t ctx;
+	gpgme_data_t data;
+	gpgme_data_t decrypted_message;
+	gpgme_data_t json;
+	gpgme_key_t key;
+	gpgme_error_t err = set_context(&ctx);
+	if (err == GPG_ERR_NO_ERROR) {
+		err = gpgme_data_new(&json);
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		err = gpgme_data_new(&data);
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		err = gpgme_data_new(&decrypted_message);
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		err = gpgme_data_new_from_file(&data, ".test_encrypted.asc\0", 1);
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		err = gpgme_op_decrypt(ctx, data, decrypted_message);
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		gpgme_decrypt_result_t result = gpgme_op_decrypt_result(ctx);
+		err = jsonify_gpgme_decrypt_result(result, json);
+		gpgme_data_release(data);
+		gpgme_data_release(decrypted_message);
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		ssize_t length = gpgme_data_write(json, "\0", 1);
+		if (length != 1) {
+			err = GPG_ERR_ENOMEM;
+		}
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		char *plaintext = gpgme_data_release_and_get_mem(json, NULL);
+		fprintf(stdout, "%s\n", plaintext);
+		gpgme_free(plaintext);
+		gpgme_release(ctx);
+	} else {
+		gpgme_data_release(json);
+	}
+}
+
 int main() {
+	fprintf(stdout, "\"TEST KEY\"\n");
 	test_key();
+	fprintf(stdout, "\"TEST CTX\"\n");
 	test_ctx();
+	fprintf(stdout, "\"TEST DATA\"\n");
 	test_data();
+	fprintf(stdout, "\"TEST VERIFY\"\n");
 	test_verify();
+	fprintf(stdout, "\"TEST SIGN\"\n");
 	test_sign();
+	fprintf(stdout, "\"TEST ENCRYPT\"\n");
+	test_encrypt();
+	fprintf(stdout, "\"TEST DECRYPT\"\n");
+	test_decrypt();
 	return 0;
 } 
