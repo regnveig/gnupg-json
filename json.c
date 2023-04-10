@@ -57,7 +57,7 @@ gpgme_error_t jsonify_colon(gpgme_data_t dh) {
 gpgme_error_t jsonify_bool(int num, gpgme_data_t dh) {
 	gpgme_error_t err = GPG_ERR_NO_ERROR;
 	size_t length;
-	if (num) {
+	if (num != 0) {
 		length = gpgme_data_write(dh, C_TRUE_STRING, C_TRUE_STRING_LEN);
 		if (length != C_TRUE_STRING_LEN) {
 			err = GPG_ERR_ENOMEM;
@@ -126,12 +126,13 @@ gpgme_error_t jsonify_int(int num, gpgme_data_t dh) {
 		len = 2;
 	}
 	char str[len];
-	int offset = snprintf(str, len * sizeof(char), "%d%c", num, '\0');
+	size_t offset = snprintf(str, len * sizeof(char), "%d%c", num, '\0');
 	if (offset != len) {
 		err = GPG_ERR_GENERAL;
 	}
-	size_t length = gpgme_data_write(dh, str, len - 1);
-	if (length != (len - 1)) {
+	size_t one = 1;
+	size_t length = gpgme_data_write(dh, str, len - one);
+	if (length != (len - one)) {
 		err = GPG_ERR_ENOMEM;
 	}
 	return err;

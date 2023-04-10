@@ -517,12 +517,12 @@ gpgme_error_t jsonify_gpgme_user_id(gpgme_user_id_t uid, gpgme_data_t dh) {
 	}
 	if (err == GPG_ERR_NO_ERROR) {
 		gpgme_tofu_info_t info = uid->tofu;
-		while (info) {
+		while (info != NULL) {
 			err = jsonify_gpgme_tofu_info(info, dh);
 			if (err != GPG_ERR_NO_ERROR) {
 				break;
 			}
-			if (info->next) {
+			if (info->next != NULL) {
 				err = jsonify_comma(dh);
 				if (err != GPG_ERR_NO_ERROR) {
 					break;
@@ -549,12 +549,12 @@ gpgme_error_t jsonify_gpgme_user_id(gpgme_user_id_t uid, gpgme_data_t dh) {
 	}
 	if (err == GPG_ERR_NO_ERROR) {
 		gpgme_key_sig_t sig = uid->signatures;
-		while (sig) {
+		while (sig != NULL) {
 			err = jsonify_gpgme_key_sig(sig, dh);
 			if (err != GPG_ERR_NO_ERROR) {
 				break;
 			}
-			if (sig->next) {
+			if (sig->next != NULL) {
 				err = jsonify_comma(dh);
 				if (err != GPG_ERR_NO_ERROR) {
 					break;
@@ -666,12 +666,12 @@ gpgme_error_t jsonify_gpgme_key(gpgme_key_t key, gpgme_data_t dh) {
 	}
 	if (err == GPG_ERR_NO_ERROR) {
 		gpgme_subkey_t subkey = key->subkeys;
-		while (subkey) {
+		while (subkey != NULL) {
 			err = jsonify_gpgme_subkey(subkey, dh);
 			if (err != GPG_ERR_NO_ERROR) {
 				break;
 			}
-			if (subkey->next) {
+			if (subkey->next != NULL) {
 				err = jsonify_comma(dh);
 				if (err != GPG_ERR_NO_ERROR) {
 					break;
@@ -698,12 +698,12 @@ gpgme_error_t jsonify_gpgme_key(gpgme_key_t key, gpgme_data_t dh) {
 	}
 	if (err == GPG_ERR_NO_ERROR) {
 		gpgme_user_id_t uid = key->uids;
-		while (uid) {
+		while (uid != NULL) {
 			err = jsonify_gpgme_user_id(uid, dh);
 			if (err != GPG_ERR_NO_ERROR) {
 				break;
 			}
-			if (uid->next) {
+			if (uid->next != NULL) {
 				err = jsonify_comma(dh);
 				if (err != GPG_ERR_NO_ERROR) {
 					break;
@@ -830,12 +830,12 @@ gpgme_error_t jsonify_ctx(gpgme_ctx_t ctx, gpgme_data_t dh) {
 	}
 	if (err == GPG_ERR_NO_ERROR) {
 		gpgme_engine_info_t engine = gpgme_ctx_get_engine_info(ctx);
-		while (engine) {
+		while (engine != NULL) {
 			err = jsonify_gpgme_engine_info(engine, dh);
 			if (err != GPG_ERR_NO_ERROR) {
 				break;
 			}
-			if (engine->next) {
+			if (engine->next != NULL) {
 				err = jsonify_comma(dh);
 				if (err != GPG_ERR_NO_ERROR) {
 					break;
@@ -980,12 +980,12 @@ gpgme_error_t jsonify_gpgme_signature(gpgme_signature_t sig, gpgme_data_t dh) {
 	}
 	if (err == GPG_ERR_NO_ERROR) {
 		gpgme_sig_notation_t note = sig->notations;
-		while (note) {
+		while (note != NULL) {
 			err = jsonify_gpgme_sig_notation(note, dh);
 			if (err != GPG_ERR_NO_ERROR) {
 				break;
 			}
-			if (note->next) {
+			if (note->next != NULL) {
 				err = jsonify_comma(dh);
 				if (err != GPG_ERR_NO_ERROR) {
 					break;
@@ -1099,7 +1099,7 @@ gpgme_error_t jsonify_gpgme_verify_result(gpgme_verify_result_t result, gpgme_da
 	}
 	if (err == GPG_ERR_NO_ERROR) {
 		gpgme_signature_t sig = result->signatures;
-		while (sig) {
+		while (sig != NULL) {
 			err = jsonify_gpgme_signature(sig, dh);
 			if (err != GPG_ERR_NO_ERROR) {
 				break;
@@ -1226,7 +1226,7 @@ gpgme_error_t jsonify_gpgme_sign_result(gpgme_sign_result_t result, gpgme_data_t
 			if (err != GPG_ERR_NO_ERROR) {
 				break;
 			}
-			if (sig->next) {
+			if (sig->next != NULL) {
 				err = jsonify_comma(dh);
 				if (err != GPG_ERR_NO_ERROR) {
 					break;
