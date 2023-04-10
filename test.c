@@ -41,7 +41,7 @@ void test_key() {
 	}
 	if (err == GPG_ERR_NO_ERROR) {
 		char *plaintext = gpgme_data_release_and_get_mem(json, NULL);
-		fprintf(stdout, "%s\n", plaintext);
+		int written = fprintf(stdout, "%s\n", plaintext);
 		gpgme_free(plaintext);
 		gpgme_release(ctx);
 	} else {
@@ -75,7 +75,7 @@ void test_data() {
 	}
 	if (err == GPG_ERR_NO_ERROR) {
 		char *plaintext = gpgme_data_release_and_get_mem(json, NULL);
-		fprintf(stdout, "%s\n", plaintext);
+		int written = fprintf(stdout, "%s\n", plaintext);
 		gpgme_free(plaintext);
 		gpgme_release(ctx);
 	} else {
@@ -118,7 +118,7 @@ void test_verify() {
 	}
 	if (err == GPG_ERR_NO_ERROR) {
 		char *plaintext = gpgme_data_release_and_get_mem(json, NULL);
-		fprintf(stdout, "%s\n", plaintext);
+		int written = fprintf(stdout, "%s\n", plaintext);
 		gpgme_free(plaintext);
 		gpgme_release(ctx);
 	} else {
@@ -172,7 +172,7 @@ void test_sign() {
 	}
 	if (err == GPG_ERR_NO_ERROR) {
 		char *plaintext = gpgme_data_release_and_get_mem(json, NULL);
-		fprintf(stdout, "%s\n", plaintext);
+		int written = fprintf(stdout, "%s\n", plaintext);
 		gpgme_free(plaintext);
 		gpgme_release(ctx);
 	} else {
@@ -199,7 +199,7 @@ void test_ctx() {
 	}
 	if (err == GPG_ERR_NO_ERROR) {
 		char *plaintext = gpgme_data_release_and_get_mem(json, NULL);
-		fprintf(stdout, "%s\n", plaintext);
+		int written = fprintf(stdout, "%s\n", plaintext);
 		gpgme_free(plaintext);
 		gpgme_release(ctx);
 	} else {
@@ -248,7 +248,7 @@ void test_encrypt() {
 	}
 	if (err == GPG_ERR_NO_ERROR) {
 		char *plaintext = gpgme_data_release_and_get_mem(json, NULL);
-		fprintf(stdout, "%s\n", plaintext);
+		int written = fprintf(stdout, "%s\n", plaintext);
 		gpgme_free(plaintext);
 		gpgme_release(ctx);
 	} else {
@@ -261,7 +261,6 @@ void test_decrypt() {
 	gpgme_data_t data;
 	gpgme_data_t decrypted_message;
 	gpgme_data_t json;
-	gpgme_key_t key;
 	gpgme_error_t err = set_context(&ctx);
 	if (err == GPG_ERR_NO_ERROR) {
 		err = gpgme_data_new(&json);
@@ -292,7 +291,7 @@ void test_decrypt() {
 	}
 	if (err == GPG_ERR_NO_ERROR) {
 		char *plaintext = gpgme_data_release_and_get_mem(json, NULL);
-		fprintf(stdout, "%s\n", plaintext);
+		int written = fprintf(stdout, "%s\n", plaintext);
 		gpgme_free(plaintext);
 		gpgme_release(ctx);
 	} else {

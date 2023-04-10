@@ -1,5 +1,9 @@
 #include "gpgme_json.h"
 
+size_t string_length(char *str) {
+	return strlen(str);
+}
+
 /* CONST TO STRINGS */
 
 const char *gpgme_validity_string(gpgme_validity_t val) {
@@ -392,7 +396,7 @@ gpgme_error_t jsonify_gpgme_key_sig(gpgme_key_sig_t sig, gpgme_data_t dh) {
 	}
 	// name
 	if (err == GPG_ERR_NO_ERROR) {
-		if (strlen(sig->name) != 0) {
+		if (string_length(sig->name) != 0) {
 			err = jsonify_key_string("name\0", sig->name, dh, true);
 		} else {
 			err = jsonify_key_null("name\0", dh, true);
@@ -400,7 +404,7 @@ gpgme_error_t jsonify_gpgme_key_sig(gpgme_key_sig_t sig, gpgme_data_t dh) {
 	}
 	// comment
 	if (err == GPG_ERR_NO_ERROR) {
-		if (strlen(sig->comment) != 0) {
+		if (string_length(sig->comment) != 0) {
 			err = jsonify_key_string("comment\0", sig->comment, dh, true);
 		} else {
 			err = jsonify_key_null("comment\0", dh, true);
@@ -408,7 +412,7 @@ gpgme_error_t jsonify_gpgme_key_sig(gpgme_key_sig_t sig, gpgme_data_t dh) {
 	}
 	// email
 	if (err == GPG_ERR_NO_ERROR) {
-		if (strlen(sig->email)) {
+		if (string_length(sig->email) != 0) {
 			err = jsonify_key_string("email\0", sig->email, dh, true);
 		} else {
 			err = jsonify_key_null("email\0", dh, true);
@@ -426,12 +430,12 @@ gpgme_error_t jsonify_gpgme_key_sig(gpgme_key_sig_t sig, gpgme_data_t dh) {
 	}
 	if (err == GPG_ERR_NO_ERROR) {
 		gpgme_sig_notation_t note = sig->notations;
-		while (note) {
+		while (note != NULL) {
 			err = jsonify_gpgme_sig_notation(note, dh);
 			if (err != GPG_ERR_NO_ERROR) {
 				break;
 			}
-			if (note->next) {
+			if (note->next != NULL) {
 				err = jsonify_comma(dh);
 				if (err != GPG_ERR_NO_ERROR) {
 					break;
@@ -469,7 +473,7 @@ gpgme_error_t jsonify_gpgme_user_id(gpgme_user_id_t uid, gpgme_data_t dh) {
 	}
 	// name
 	if (err == GPG_ERR_NO_ERROR) {
-		if (strlen(uid->name) != 0) {
+		if (string_length(uid->name) != 0) {
 			err = jsonify_key_string("name\0", uid->name, dh, true);
 		} else {
 			err = jsonify_key_null("name\0", dh, true);
@@ -477,7 +481,7 @@ gpgme_error_t jsonify_gpgme_user_id(gpgme_user_id_t uid, gpgme_data_t dh) {
 	}
 	// comment
 	if (err == GPG_ERR_NO_ERROR) {
-		if (strlen(uid->comment) != 0) {
+		if (string_length(uid->comment) != 0) {
 			err = jsonify_key_string("comment\0", uid->comment, dh, true);
 		} else {
 			err = jsonify_key_null("comment\0", dh, true);
@@ -485,7 +489,7 @@ gpgme_error_t jsonify_gpgme_user_id(gpgme_user_id_t uid, gpgme_data_t dh) {
 	}
 	// email
 	if (err == GPG_ERR_NO_ERROR) {
-		if (strlen(uid->email) != 0) {
+		if (string_length(uid->email) != 0) {
 			err = jsonify_key_string("email\0", uid->email, dh, true);
 		} else {
 			err = jsonify_key_null("email\0", dh, true);
@@ -1098,7 +1102,7 @@ gpgme_error_t jsonify_gpgme_verify_result(gpgme_verify_result_t result, gpgme_da
 			if (err != GPG_ERR_NO_ERROR) {
 				break;
 			}
-			if (sig->next) {
+			if (sig->next != NULL) {
 				err = jsonify_comma(dh);
 				if (err != GPG_ERR_NO_ERROR) {
 					break;
@@ -1188,7 +1192,7 @@ gpgme_error_t jsonify_gpgme_sign_result(gpgme_sign_result_t result, gpgme_data_t
 			if (err != GPG_ERR_NO_ERROR) {
 				break;
 			}
-			if (siner->next) {
+			if (siner->next != NULL) {
 				err = jsonify_comma(dh);
 				if (err != GPG_ERR_NO_ERROR) {
 					break;
@@ -1256,7 +1260,7 @@ gpgme_error_t jsonify_gpgme_encrypt_result(gpgme_encrypt_result_t result, gpgme_
 			if (err != GPG_ERR_NO_ERROR) {
 				break;
 			}
-			if (rec->next) {
+			if (rec->next != 0) {
 				err = jsonify_comma(dh);
 				if (err != GPG_ERR_NO_ERROR) {
 					break;
@@ -1343,7 +1347,7 @@ gpgme_error_t jsonify_gpgme_decrypt_result(gpgme_decrypt_result_t result, gpgme_
 			if (err != GPG_ERR_NO_ERROR) {
 				break;
 			}
-			if (rec->next) {
+			if (rec->next != NULL) {
 				err = jsonify_comma(dh);
 				if (err != GPG_ERR_NO_ERROR) {
 					break;

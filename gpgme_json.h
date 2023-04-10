@@ -3,6 +3,8 @@
 
 #include "json.h"
 
+size_t string_length(char *str);
+
 // const to strings
 const char *gpgme_validity_string(gpgme_validity_t val);
 const char *gpgme_pinentry_mode_string(gpgme_pinentry_mode_t val);
