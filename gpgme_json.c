@@ -324,6 +324,7 @@ gpgme_error_t jsonify_gpgme_tofu_info(gpgme_tofu_info_t info, gpgme_data_t dh) {
 }
 
 gpgme_error_t jsonify_gpgme_key_sig(gpgme_key_sig_t sig, gpgme_data_t dh) {
+	size_t zero = 0;
 	gpgme_error_t err = jsonify_left_brace(dh);
 	// is revoked ?
 	if (err == GPG_ERR_NO_ERROR) {
@@ -396,7 +397,7 @@ gpgme_error_t jsonify_gpgme_key_sig(gpgme_key_sig_t sig, gpgme_data_t dh) {
 	}
 	// name
 	if (err == GPG_ERR_NO_ERROR) {
-		if (string_length(sig->name) != 0) {
+		if (string_length(sig->name) != zero) {
 			err = jsonify_key_string("name\0", sig->name, dh, true);
 		} else {
 			err = jsonify_key_null("name\0", dh, true);
@@ -404,7 +405,7 @@ gpgme_error_t jsonify_gpgme_key_sig(gpgme_key_sig_t sig, gpgme_data_t dh) {
 	}
 	// comment
 	if (err == GPG_ERR_NO_ERROR) {
-		if (string_length(sig->comment) != 0) {
+		if (string_length(sig->comment) != zero) {
 			err = jsonify_key_string("comment\0", sig->comment, dh, true);
 		} else {
 			err = jsonify_key_null("comment\0", dh, true);
@@ -412,7 +413,7 @@ gpgme_error_t jsonify_gpgme_key_sig(gpgme_key_sig_t sig, gpgme_data_t dh) {
 	}
 	// email
 	if (err == GPG_ERR_NO_ERROR) {
-		if (string_length(sig->email) != 0) {
+		if (string_length(sig->email) != zero) {
 			err = jsonify_key_string("email\0", sig->email, dh, true);
 		} else {
 			err = jsonify_key_null("email\0", dh, true);
@@ -454,6 +455,7 @@ gpgme_error_t jsonify_gpgme_key_sig(gpgme_key_sig_t sig, gpgme_data_t dh) {
 }
 
 gpgme_error_t jsonify_gpgme_user_id(gpgme_user_id_t uid, gpgme_data_t dh) {
+	size_t zero = 0;
 	gpgme_error_t err = jsonify_left_brace(dh);
 	// revoked ?
 	if (err == GPG_ERR_NO_ERROR) {
@@ -473,7 +475,7 @@ gpgme_error_t jsonify_gpgme_user_id(gpgme_user_id_t uid, gpgme_data_t dh) {
 	}
 	// name
 	if (err == GPG_ERR_NO_ERROR) {
-		if (string_length(uid->name) != 0) {
+		if (string_length(uid->name) != zero) {
 			err = jsonify_key_string("name\0", uid->name, dh, true);
 		} else {
 			err = jsonify_key_null("name\0", dh, true);
@@ -481,7 +483,7 @@ gpgme_error_t jsonify_gpgme_user_id(gpgme_user_id_t uid, gpgme_data_t dh) {
 	}
 	// comment
 	if (err == GPG_ERR_NO_ERROR) {
-		if (string_length(uid->comment) != 0) {
+		if (string_length(uid->comment) != zero) {
 			err = jsonify_key_string("comment\0", uid->comment, dh, true);
 		} else {
 			err = jsonify_key_null("comment\0", dh, true);
@@ -489,7 +491,7 @@ gpgme_error_t jsonify_gpgme_user_id(gpgme_user_id_t uid, gpgme_data_t dh) {
 	}
 	// email
 	if (err == GPG_ERR_NO_ERROR) {
-		if (string_length(uid->email) != 0) {
+		if (string_length(uid->email) != zero) {
 			err = jsonify_key_string("email\0", uid->email, dh, true);
 		} else {
 			err = jsonify_key_null("email\0", dh, true);

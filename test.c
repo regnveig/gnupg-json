@@ -15,7 +15,7 @@ gpgme_error_t set_context(gpgme_ctx_t *ctx) {
 	return GPG_ERR_NO_ERROR;
 }
 
-void test_key() {
+gpgme_error_t test_key() {
 	gpgme_ctx_t ctx;
 	gpgme_key_t key;
 	gpgme_data_t json;
@@ -41,15 +41,16 @@ void test_key() {
 	}
 	if (err == GPG_ERR_NO_ERROR) {
 		char *plaintext = gpgme_data_release_and_get_mem(json, NULL);
-		int written = fprintf(stdout, "%s\n", plaintext);
+		fprintf(stdout, "%s\n", plaintext);
 		gpgme_free(plaintext);
 		gpgme_release(ctx);
 	} else {
 		gpgme_data_release(json);
 	}
+	return err;
 }
 
-void test_data() {
+gpgme_error_t test_data() {
 	gpgme_ctx_t ctx;
 	gpgme_data_t data;
 	gpgme_data_t json;
@@ -75,15 +76,16 @@ void test_data() {
 	}
 	if (err == GPG_ERR_NO_ERROR) {
 		char *plaintext = gpgme_data_release_and_get_mem(json, NULL);
-		int written = fprintf(stdout, "%s\n", plaintext);
+		fprintf(stdout, "%s\n", plaintext);
 		gpgme_free(plaintext);
 		gpgme_release(ctx);
 	} else {
 		gpgme_data_release(json);
 	}
+	return err;
 }
 
-void test_verify() {
+gpgme_error_t test_verify() {
 	gpgme_ctx_t ctx;
 	gpgme_data_t data;
 	gpgme_data_t plain;
@@ -118,15 +120,16 @@ void test_verify() {
 	}
 	if (err == GPG_ERR_NO_ERROR) {
 		char *plaintext = gpgme_data_release_and_get_mem(json, NULL);
-		int written = fprintf(stdout, "%s\n", plaintext);
+		fprintf(stdout, "%s\n", plaintext);
 		gpgme_free(plaintext);
 		gpgme_release(ctx);
 	} else {
 		gpgme_data_release(json);
 	}
+	return err;
 }
 
-void test_sign() {
+gpgme_error_t test_sign() {
 	gpgme_ctx_t ctx;
 	gpgme_data_t data;
 	gpgme_data_t signed_message;
@@ -172,15 +175,16 @@ void test_sign() {
 	}
 	if (err == GPG_ERR_NO_ERROR) {
 		char *plaintext = gpgme_data_release_and_get_mem(json, NULL);
-		int written = fprintf(stdout, "%s\n", plaintext);
+		fprintf(stdout, "%s\n", plaintext);
 		gpgme_free(plaintext);
 		gpgme_release(ctx);
 	} else {
 		gpgme_data_release(json);
 	}
+	return err;
 }
 
-void test_ctx() {
+gpgme_error_t test_ctx() {
 	gpgme_ctx_t ctx;
 	gpgme_data_t json;
 	
@@ -199,15 +203,16 @@ void test_ctx() {
 	}
 	if (err == GPG_ERR_NO_ERROR) {
 		char *plaintext = gpgme_data_release_and_get_mem(json, NULL);
-		int written = fprintf(stdout, "%s\n", plaintext);
+		fprintf(stdout, "%s\n", plaintext);
 		gpgme_free(plaintext);
 		gpgme_release(ctx);
 	} else {
 		gpgme_data_release(json);
 	}
+	return err;
 }
 
-void test_encrypt() {
+gpgme_error_t test_encrypt() {
 	gpgme_ctx_t ctx;
 	gpgme_data_t data;
 	gpgme_data_t encrypted_message;
@@ -248,15 +253,16 @@ void test_encrypt() {
 	}
 	if (err == GPG_ERR_NO_ERROR) {
 		char *plaintext = gpgme_data_release_and_get_mem(json, NULL);
-		int written = fprintf(stdout, "%s\n", plaintext);
+		fprintf(stdout, "%s\n", plaintext);
 		gpgme_free(plaintext);
 		gpgme_release(ctx);
 	} else {
 		gpgme_data_release(json);
 	}
+	return err;
 }
 
-void test_decrypt() {
+gpgme_error_t test_decrypt() {
 	gpgme_ctx_t ctx;
 	gpgme_data_t data;
 	gpgme_data_t decrypted_message;
@@ -291,28 +297,42 @@ void test_decrypt() {
 	}
 	if (err == GPG_ERR_NO_ERROR) {
 		char *plaintext = gpgme_data_release_and_get_mem(json, NULL);
-		int written = fprintf(stdout, "%s\n", plaintext);
+		fprintf(stdout, "%s\n", plaintext);
 		gpgme_free(plaintext);
 		gpgme_release(ctx);
 	} else {
 		gpgme_data_release(json);
 	}
+	return err;
 }
 
 int main() {
 	fprintf(stdout, "\"TEST KEY\"\n");
-	test_key();
+	gpgme_error_t err = test_key();
 	fprintf(stdout, "\"TEST CTX\"\n");
-	test_ctx();
+	if (err == GPG_ERR_NO_ERROR) {
+		err = test_ctx();
+	}
 	fprintf(stdout, "\"TEST DATA\"\n");
-	test_data();
+	if (err == GPG_ERR_NO_ERROR) {
+		err = test_data();
+	}
 	fprintf(stdout, "\"TEST VERIFY\"\n");
-	test_verify();
+	if (err == GPG_ERR_NO_ERROR) {
+		err = test_verify();
+	}
 	fprintf(stdout, "\"TEST SIGN\"\n");
-	test_sign();
+	if (err == GPG_ERR_NO_ERROR) {
+		err = test_sign();
+	}
 	fprintf(stdout, "\"TEST ENCRYPT\"\n");
-	test_encrypt();
+	if (err == GPG_ERR_NO_ERROR) {
+		err = test_encrypt();
+	}
 	fprintf(stdout, "\"TEST DECRYPT\"\n");
-	test_decrypt();
+	if (err == GPG_ERR_NO_ERROR) {
+		err = test_decrypt();
+	}
+	fprintf(stdout, "\"%s\"\n", gpgme_strerror(err));
 	return 0;
 } 
