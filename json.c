@@ -2,7 +2,7 @@
 
 gpgme_error_t jsonify_left_brace(gpgme_data_t dh) {
 	gpgme_error_t err = GPG_ERR_NO_ERROR;
-	ssize_t length = gpgme_data_write(dh, C_LEFT_BRACE, C_LEFT_BRACE_LEN);
+	size_t length = gpgme_data_write(dh, C_LEFT_BRACE, C_LEFT_BRACE_LEN);
 	if (length != C_LEFT_BRACE_LEN) {
 		err = GPG_ERR_ENOMEM;
 	}
@@ -11,7 +11,7 @@ gpgme_error_t jsonify_left_brace(gpgme_data_t dh) {
 
 gpgme_error_t jsonify_right_brace(gpgme_data_t dh) {
 	gpgme_error_t err = GPG_ERR_NO_ERROR;
-	ssize_t length = gpgme_data_write(dh, C_RIGHT_BRACE, C_RIGHT_BRACE_LEN);
+	size_t length = gpgme_data_write(dh, C_RIGHT_BRACE, C_RIGHT_BRACE_LEN);
 	if (length != C_RIGHT_BRACE_LEN) {
 		err = GPG_ERR_ENOMEM;
 	}
@@ -20,7 +20,7 @@ gpgme_error_t jsonify_right_brace(gpgme_data_t dh) {
 
 gpgme_error_t jsonify_left_square_bracket(gpgme_data_t dh) {
 	gpgme_error_t err = GPG_ERR_NO_ERROR;
-	ssize_t length = gpgme_data_write(dh, C_LEFT_SQUARE_BRACKET, C_LEFT_SQUARE_BRACKET_LEN);
+	size_t length = gpgme_data_write(dh, C_LEFT_SQUARE_BRACKET, C_LEFT_SQUARE_BRACKET_LEN);
 	if (length != C_LEFT_SQUARE_BRACKET_LEN) {
 		err = GPG_ERR_ENOMEM;
 	}
@@ -29,7 +29,7 @@ gpgme_error_t jsonify_left_square_bracket(gpgme_data_t dh) {
 
 gpgme_error_t jsonify_right_square_bracket(gpgme_data_t dh) {
 	gpgme_error_t err = GPG_ERR_NO_ERROR;
-	ssize_t length = gpgme_data_write(dh, C_RIGHT_SQUARE_BRACKET, C_RIGHT_SQUARE_BRACKET_LEN);
+	size_t length = gpgme_data_write(dh, C_RIGHT_SQUARE_BRACKET, C_RIGHT_SQUARE_BRACKET_LEN);
 	if (length != C_RIGHT_SQUARE_BRACKET_LEN) {
 		err = GPG_ERR_ENOMEM;
 	}
@@ -38,7 +38,7 @@ gpgme_error_t jsonify_right_square_bracket(gpgme_data_t dh) {
 
 gpgme_error_t jsonify_comma(gpgme_data_t dh) {
 	gpgme_error_t err = GPG_ERR_NO_ERROR;
-	ssize_t length = gpgme_data_write(dh, C_COMMA, C_COMMA_LEN);
+	size_t length = gpgme_data_write(dh, C_COMMA, C_COMMA_LEN);
 	if (length != C_COMMA_LEN) {
 		err = GPG_ERR_ENOMEM;
 	}
@@ -47,7 +47,7 @@ gpgme_error_t jsonify_comma(gpgme_data_t dh) {
 
 gpgme_error_t jsonify_colon(gpgme_data_t dh) {
 	gpgme_error_t err = GPG_ERR_NO_ERROR;
-	ssize_t length = gpgme_data_write(dh, C_COLON, C_COLON_LEN);
+	size_t length = gpgme_data_write(dh, C_COLON, C_COLON_LEN);
 	if (length != C_COLON_LEN) {
 		err = GPG_ERR_ENOMEM;
 	}
@@ -56,7 +56,7 @@ gpgme_error_t jsonify_colon(gpgme_data_t dh) {
 
 gpgme_error_t jsonify_bool(int num, gpgme_data_t dh) {
 	gpgme_error_t err = GPG_ERR_NO_ERROR;
-	ssize_t length;
+	size_t length;
 	if (num) {
 		length = gpgme_data_write(dh, C_TRUE_STRING, C_TRUE_STRING_LEN);
 		if (length != C_TRUE_STRING_LEN) {
@@ -73,7 +73,7 @@ gpgme_error_t jsonify_bool(int num, gpgme_data_t dh) {
 
 gpgme_error_t jsonify_string(const char *str, gpgme_data_t dh) {
 	gpgme_error_t err = GPG_ERR_NO_ERROR;
-	ssize_t length = gpgme_data_write(dh, C_QUOTE, C_QUOTE_LEN);
+	size_t length = gpgme_data_write(dh, C_QUOTE, C_QUOTE_LEN);
 	if (length != C_QUOTE_LEN) {
 		err = GPG_ERR_ENOMEM;
 	}
@@ -127,8 +127,10 @@ gpgme_error_t jsonify_int(int num, gpgme_data_t dh) {
 	}
 	char str[len];
 	int offset = snprintf(str, len * sizeof(char), "%d%c", num, '\0');
-	if (offset != len) { err = GPG_ERR_GENERAL; }
-	ssize_t length = gpgme_data_write(dh, str, len - 1);
+	if (offset != len) {
+		err = GPG_ERR_GENERAL;
+	}
+	size_t length = gpgme_data_write(dh, str, len - 1);
 	if (length != (len - 1)) {
 		err = GPG_ERR_ENOMEM;
 	}
@@ -137,7 +139,7 @@ gpgme_error_t jsonify_int(int num, gpgme_data_t dh) {
 
 gpgme_error_t jsonify_null(gpgme_data_t dh) {
 	gpgme_error_t err = GPG_ERR_NO_ERROR;
-	ssize_t length =  gpgme_data_write(dh, C_NULL_STRING, C_NULL_STRING_LEN);
+	size_t length =  gpgme_data_write(dh, C_NULL_STRING, C_NULL_STRING_LEN);
 	if (length != C_NULL_STRING_LEN) {
 		err = GPG_ERR_ENOMEM;
 	}

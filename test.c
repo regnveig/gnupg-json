@@ -41,7 +41,7 @@ gpgme_error_t test_key() {
 	}
 	if (err == GPG_ERR_NO_ERROR) {
 		char *plaintext = gpgme_data_release_and_get_mem(json, NULL);
-		fprintf(stdout, "%s\n", plaintext);
+		(void)fprintf(stdout, "%s\n", plaintext);
 		gpgme_free(plaintext);
 		gpgme_release(ctx);
 	} else {
@@ -76,7 +76,7 @@ gpgme_error_t test_data() {
 	}
 	if (err == GPG_ERR_NO_ERROR) {
 		char *plaintext = gpgme_data_release_and_get_mem(json, NULL);
-		fprintf(stdout, "%s\n", plaintext);
+		(void)fprintf(stdout, "%s\n", plaintext);
 		gpgme_free(plaintext);
 		gpgme_release(ctx);
 	} else {
@@ -120,7 +120,7 @@ gpgme_error_t test_verify() {
 	}
 	if (err == GPG_ERR_NO_ERROR) {
 		char *plaintext = gpgme_data_release_and_get_mem(json, NULL);
-		fprintf(stdout, "%s\n", plaintext);
+		(void)fprintf(stdout, "%s\n", plaintext);
 		gpgme_free(plaintext);
 		gpgme_release(ctx);
 	} else {
@@ -175,7 +175,7 @@ gpgme_error_t test_sign() {
 	}
 	if (err == GPG_ERR_NO_ERROR) {
 		char *plaintext = gpgme_data_release_and_get_mem(json, NULL);
-		fprintf(stdout, "%s\n", plaintext);
+		(void)fprintf(stdout, "%s\n", plaintext);
 		gpgme_free(plaintext);
 		gpgme_release(ctx);
 	} else {
@@ -203,7 +203,7 @@ gpgme_error_t test_ctx() {
 	}
 	if (err == GPG_ERR_NO_ERROR) {
 		char *plaintext = gpgme_data_release_and_get_mem(json, NULL);
-		fprintf(stdout, "%s\n", plaintext);
+		(void)fprintf(stdout, "%s\n", plaintext);
 		gpgme_free(plaintext);
 		gpgme_release(ctx);
 	} else {
@@ -253,7 +253,7 @@ gpgme_error_t test_encrypt() {
 	}
 	if (err == GPG_ERR_NO_ERROR) {
 		char *plaintext = gpgme_data_release_and_get_mem(json, NULL);
-		fprintf(stdout, "%s\n", plaintext);
+		(void)fprintf(stdout, "%s\n", plaintext);
 		gpgme_free(plaintext);
 		gpgme_release(ctx);
 	} else {
@@ -297,7 +297,7 @@ gpgme_error_t test_decrypt() {
 	}
 	if (err == GPG_ERR_NO_ERROR) {
 		char *plaintext = gpgme_data_release_and_get_mem(json, NULL);
-		fprintf(stdout, "%s\n", plaintext);
+		(void)fprintf(stdout, "%s\n", plaintext);
 		gpgme_free(plaintext);
 		gpgme_release(ctx);
 	} else {
@@ -307,32 +307,32 @@ gpgme_error_t test_decrypt() {
 }
 
 int main() {
-	fprintf(stdout, "\"TEST KEY\"\n");
+	(void)fprintf(stdout, "\"TEST KEY\"\n");
 	gpgme_error_t err = test_key();
-	fprintf(stdout, "\"TEST CTX\"\n");
+	(void)fprintf(stdout, "\"TEST CTX\"\n");
 	if (err == GPG_ERR_NO_ERROR) {
 		err = test_ctx();
 	}
-	fprintf(stdout, "\"TEST DATA\"\n");
+	(void)fprintf(stdout, "\"TEST DATA\"\n");
 	if (err == GPG_ERR_NO_ERROR) {
 		err = test_data();
 	}
-	fprintf(stdout, "\"TEST VERIFY\"\n");
+	(void)fprintf(stdout, "\"TEST VERIFY\"\n");
 	if (err == GPG_ERR_NO_ERROR) {
 		err = test_verify();
 	}
-	fprintf(stdout, "\"TEST SIGN\"\n");
+	(void)fprintf(stdout, "\"TEST SIGN\"\n");
 	if (err == GPG_ERR_NO_ERROR) {
 		err = test_sign();
 	}
-	fprintf(stdout, "\"TEST ENCRYPT\"\n");
+	(void)fprintf(stdout, "\"TEST ENCRYPT\"\n");
 	if (err == GPG_ERR_NO_ERROR) {
 		err = test_encrypt();
 	}
-	fprintf(stdout, "\"TEST DECRYPT\"\n");
+	(void)fprintf(stdout, "\"TEST DECRYPT\"\n");
 	if (err == GPG_ERR_NO_ERROR) {
 		err = test_decrypt();
 	}
-	fprintf(stdout, "\"%s\"\n", gpgme_strerror(err));
+	(void)fprintf(stdout, "\"%s\"\n", gpgme_strerror(err));
 	return 0;
 } 
