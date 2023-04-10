@@ -1,18 +1,19 @@
 #include "gpgme_json.h"
 
 gpgme_error_t set_context(gpgme_ctx_t *ctx) {
-	gpgme_error_t err;
-	gpgme_check_version(NULL);
-	err = gpgme_new(ctx);
-	if (err) return err;
-	const char *engine = gpgme_get_dirinfo("gpg-name\0");
-	const char *home_dir = NULL;
-	err = gpgme_ctx_set_engine_info(*ctx, GPGME_PROTOCOL_OPENPGP, engine, home_dir);
-	if (err) return err;
-	gpgme_set_armor(*ctx, 1);
-	gpgme_set_offline(*ctx, 1);
-	gpgme_signers_clear(*ctx);
-	return GPG_ERR_NO_ERROR;
+	(void)gpgme_check_version(NULL);
+	gpgme_error_t err = gpgme_new(ctx);
+	if (err == GPG_ERR_NO_ERROR) {
+		const char *engine = gpgme_get_dirinfo("gpg-name\0");
+		const char *home_dir = NULL;
+		err = gpgme_ctx_set_engine_info(*ctx, GPGME_PROTOCOL_OPENPGP, engine, home_dir);
+	}
+	if (err == GPG_ERR_NO_ERROR) {
+		gpgme_set_armor(*ctx, 1);
+		gpgme_set_offline(*ctx, 1);
+		gpgme_signers_clear(*ctx);
+	}
+	return err;
 }
 
 gpgme_error_t test_key() {
@@ -34,8 +35,9 @@ gpgme_error_t test_key() {
 		gpgme_key_release(key);
 	}
 	if (err == GPG_ERR_NO_ERROR) {
-		ssize_t length = gpgme_data_write(json, "\0", 1);
-		if (length != 1) {
+		size_t onechar = 1;
+		size_t length = gpgme_data_write(json, "\0", onechar);
+		if (length != onechar) {
 			err = GPG_ERR_ENOMEM;
 		}
 	}
@@ -69,8 +71,9 @@ gpgme_error_t test_data() {
 		gpgme_data_release(data);
 	}
 	if (err == GPG_ERR_NO_ERROR) {
-		ssize_t length = gpgme_data_write(json, "\0", 1);
-		if (length != 1) {
+		size_t onechar = 1;
+		size_t length = gpgme_data_write(json, "\0", onechar);
+		if (length != onechar) {
 			err = GPG_ERR_ENOMEM;
 		}
 	}
@@ -113,8 +116,9 @@ gpgme_error_t test_verify() {
 		gpgme_data_release(plain);
 	}
 	if (err == GPG_ERR_NO_ERROR) {
-		ssize_t length = gpgme_data_write(json, "\0", 1);
-		if (length != 1) {
+		size_t onechar = 1;
+		size_t length = gpgme_data_write(json, "\0", onechar);
+		if (length != onechar) {
 			err = GPG_ERR_ENOMEM;
 		}
 	}
@@ -168,8 +172,9 @@ gpgme_error_t test_sign() {
 		gpgme_data_release(signed_message);
 	}
 	if (err == GPG_ERR_NO_ERROR) {
-		ssize_t length = gpgme_data_write(json, "\0", 1);
-		if (length != 1) {
+		size_t onechar = 1;
+		size_t length = gpgme_data_write(json, "\0", onechar);
+		if (length != onechar) {
 			err = GPG_ERR_ENOMEM;
 		}
 	}
@@ -196,8 +201,9 @@ gpgme_error_t test_ctx() {
 		err = jsonify_ctx(ctx, json);
 	}
 	if (err == GPG_ERR_NO_ERROR) {
-		ssize_t length = gpgme_data_write(json, "\0", 1);
-		if (length != 1) {
+		size_t onechar = 1;
+		size_t length = gpgme_data_write(json, "\0", onechar);
+		if (length != onechar) {
 			err = GPG_ERR_ENOMEM;
 		}
 	}
@@ -246,8 +252,9 @@ gpgme_error_t test_encrypt() {
 		gpgme_data_release(encrypted_message);
 	}
 	if (err == GPG_ERR_NO_ERROR) {
-		ssize_t length = gpgme_data_write(json, "\0", 1);
-		if (length != 1) {
+		size_t onechar = 1;
+		size_t length = gpgme_data_write(json, "\0", onechar);
+		if (length != onechar) {
 			err = GPG_ERR_ENOMEM;
 		}
 	}
@@ -290,8 +297,9 @@ gpgme_error_t test_decrypt() {
 		gpgme_data_release(decrypted_message);
 	}
 	if (err == GPG_ERR_NO_ERROR) {
-		ssize_t length = gpgme_data_write(json, "\0", 1);
-		if (length != 1) {
+		size_t onechar = 1;
+		size_t length = gpgme_data_write(json, "\0", onechar);
+		if (length != onechar) {
 			err = GPG_ERR_ENOMEM;
 		}
 	}
